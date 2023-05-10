@@ -5,18 +5,20 @@ def conferirarquivo(nome):
         a = open(nome, 'r')
         a.close()
     except:
-        print('\33[31mArquivo não existente, criando arquivo...\33[m')
+        #print('\33[31mArquivo não existente, criando arquivo...\33[m')
         existencia = False
     return(existencia)
 
-def criararquivo(nome):
-    existencia = conferirarquivo()
+def criararquivo(nome, cabeçalho):
+    existencia = conferirarquivo(nome)
     if not existencia:
-        with open(nome, 'w') as arquivo:
-            arquivo.write('ordem,nome,categoria,valor,data,hora\n')
-        print('\33[32mArquivo controle.csv criado, com sucesso\33[m')
+        with open(nome, 'w', newline='', encoding='utf-8') as arquivo:
+            arquivo.write(f'{cabeçalho}\n')
+        #print('\33[32mArquivo controle.csv criado, com sucesso\33[m')
     else:
-        print('Encontrado arquivo controle.csv')
+        pass
+    #else:
+        #print('Encontrado arquivo controle.csv')
     return(nome)
 
 def cadastro(arqbanda, arqlocal):
@@ -59,6 +61,7 @@ def cadastro(arqbanda, arqlocal):
             arquivo.write(f'{usuario},{senha},{tipo},{nomelocal},{endereço},{estilo},{ctt}')
 
 def login(arqbanda, arqlocal):
+    import lcmolde as lc
     from getpass import getpass
     usuario = input('insira seu usuário: ')
     senha = getpass(prompt='insira sua senha: ')
