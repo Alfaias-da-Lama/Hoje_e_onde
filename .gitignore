@@ -400,3 +400,4 @@ FodyWeavers.xsd
 #Arquive Types
 *.csv
 *.xlsx
+*.txt

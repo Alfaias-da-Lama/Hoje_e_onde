@@ -34,7 +34,7 @@ def cadastro(arqbanda, arqlocal):
         integrantes = []
         for integrante in range(qtdinte):
             integrantes.append(input(f'digite o nome do integrante {integrante+1}: '))
-        integrantes = ';'.join(integrantes)
+        integrantes = '/'.join(integrantes)
         ctt = []
         while True:
             contato = input('insira um contato email ou celular ou 0 para parar: ')
@@ -42,12 +42,17 @@ def cadastro(arqbanda, arqlocal):
                 break
             else:
                 ctt.append(contato)
-            ctt = ';'.join(ctt)
-        with open(arq,'a', newline='', encoding='utf-8') as arquivo:
-            arquivo.write(f'{usuario},{senha},{tipo},{nomebanda},{integrantes},{bairro},{estilo},{ctt}')
+        ctt = '/'.join(ctt)
+        try:
+            with open(arqbanda,'a', newline='', encoding='utf-8') as arquivo:
+                arquivo.write(f'{usuario};{senha};{tipo};{nomebanda};{integrantes};{bairro};{estilo};{ctt}\n')
+        except:
+            print('\33[31mErro ao cadastrar, tente novamente\33[m')
+        else:
+            print('\33[33mCadastro realizado com sucesso!\33[m')
     elif tipo == 'local':
         nomelocal = input('insira o nome do seu local: ')
-        endereço = input('insira o endereço do local')
+        endereço = input('insira o endereço do local: ')
         estilo = input('insira o estilo musical de preferencia do local: ')
         ctt = []
         while True:
@@ -56,13 +61,21 @@ def cadastro(arqbanda, arqlocal):
                 break
             else:
                 ctt.append(contato)
-        ctt = ';'.join(ctt)
-        with open(arq,'a', newline='', encoding='utf-8') as arquivo:
-            arquivo.write(f'{usuario},{senha},{tipo},{nomelocal},{endereço},{estilo},{ctt}')
+        ctt = '/'.join(ctt)
+        try:
+            with open(arqlocal,'a', newline='', encoding='utf-8') as arquivo:
+                arquivo.write(f'{usuario};{senha};{tipo};{nomelocal};{endereço};{estilo};{ctt}\n')
+        except:
+            print('\33[31mErro ao cadastrar, tente novamente\33[m')
+        else:
+            print('\33[33mCadastro realizado com sucesso!\33[m')
 
 def login(arqbanda, arqlocal):
     import lcmolde as lc
     from getpass import getpass
+    import menu
+    banda = False
+    perfil = False
     usuario = input('insira seu usuário: ')
     senha = getpass(prompt='insira sua senha: ')
     with open(arqbanda, 'r', newline='', encoding='utf-8') as arquivo:
@@ -71,6 +84,7 @@ def login(arqbanda, arqlocal):
             if perfil[0] == usuario and perfil[1] == 'senha':
                 banda = True
                 print('perfil encontrado')
+                perfil = True
                 usuario = lc.Banda(nomedabanda=perfil[3], integrantes=perfil[4], bairro=perfil[5], tipomusical=perfil[6], ctt=perfil[7])
             else:
                 continue
@@ -81,7 +95,13 @@ def login(arqbanda, arqlocal):
                 if perfil[0] == usuario and perfil[1] == 'senha':
                     local = True
                     print('perfil encontrado')
-                    lc.Local(nome=perfil[3], endereco=perfil[4], tipomusical=perfil[5], ctt=perfil[6])
+                    perfil = True
+                    usuario = lc.Local(nome=perfil[3], endereco=perfil[4], tipomusical=perfil[5], ctt=perfil[6])
                 else:
                     continue
-    
+            if banda:
+                return(usuario)
+    if not perfil:
+        print('''\33[31mPerfil não encontrado!\33[m''')
+        reposta2 = menu.menu(['cadastrar', 'prosseguir sem cadastro'])
+        return(resposta2)

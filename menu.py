@@ -5,6 +5,7 @@ def menu(componentes):
         cont += 1
     resposta = int(input('''o que deseja fazer? 
     -> '''))
+    return(resposta)
 
 def titulo(mensagem):
     mensagem.title()
