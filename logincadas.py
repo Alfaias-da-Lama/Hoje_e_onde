@@ -24,17 +24,41 @@ def criararquivo(nome, cabeçalho):
 def cadastro(arqbanda, arqlocal):
     print('dados do cadastro')
     usuario = input('insira seu nome de usuário: ')
-    senha = input('escolha uma senha: ')
-    tipo = input('qual o tipo de cadastro? [local] [banda]: ')
-    if tipo == 'banda':
-        nomebanda = input('qual o nome da sua banda: ')
-        estilo = input('qual o estilo musical da banda: ')
-        bairro = input('digite o bairro da sau banda: ')
-        qtdinte = int(input('quantos integrantes tem a sua banda: '))
-        integrantes = []
-        for integrante in range(qtdinte):
-            integrantes.append(input(f'digite o nome do integrante {integrante+1}: '))
-        integrantes = '/'.join(integrantes)
+    while True:
+        while True:
+            senha = input('escolha uma senha: ')
+            if len(senha) < 8:
+                print('\33[ma senha precisa ter 8 caracteres ou mais\33[m')
+        confirmacao = input('repita sua senha: ')
+        if senha == confirmacao:
+            break
+        else:
+            print('\33[31msenhas não condizem\33[m')
+    tipo = input('qual o tipo de cadastro? [local] [artista]: ')
+    if tipo == 'artista':
+        grupo = input('voce é artista [solo] ou tem [banda]?')
+        if grupo == 'banda':
+            nomebanda = input('qual o nome da sua banda: ')
+            solo = False
+        elif grupo == 'solo':
+            nomebanda = input('qual o seu nome artístico: ')
+            solo = True
+        if solo:
+            estilo = input('qual seu estilo musical: ')
+        else:
+            estilo = input('qual o estilo musical da banda: ')
+        if solo:
+            bairro = input('qual o seu bairro: ')
+        else:
+            bairro = input('digite o bairro da sua banda: ')
+        if solo:
+            integrantes = 'NaN'
+        else:
+            qtdinte = int(input('quantos integrantes tem a sua banda: '))
+            integrantes = []
+            for integrante in range(qtdinte):
+                integrantes.append(input(f'digite o nome do integrante {integrante+1}: '))
+            integrantes = '/'.join(integrantes)
         ctt = []
         while True:
             contato = input('insira um contato email ou celular ou 0 para parar: ')
@@ -75,33 +99,44 @@ def login(arqbanda, arqlocal):
     from getpass import getpass
     import menu
     banda = False
-    perfil = False
+    temperfil = False
     usuario = input('insira seu usuário: ')
+    print(usuario)
     senha = getpass(prompt='insira sua senha: ')
+    print(senha)
     with open(arqbanda, 'r', newline='', encoding='utf-8') as arquivo:
         perfis = arquivo.readlines()
         for perfil in perfis:
-            if perfil[0] == usuario and perfil[1] == 'senha':
+            perfil = perfil.split(';')
+            print(perfil)
+            if perfil[0] == usuario and perfil[1] == senha:
                 banda = True
                 print('perfil encontrado')
-                perfil = True
+                temperfil = True
                 usuario = lc.Banda(nomedabanda=perfil[3], integrantes=perfil[4], bairro=perfil[5], tipomusical=perfil[6], ctt=perfil[7])
+                return usuario
+                break
             else:
                 continue
     if not banda:
         with open(arqlocal, 'r', newline='', encoding='utf-8') as arquivo:
             perfis = arquivo.readlines()
+            print('tentando local')
             for perfil in perfis:
-                if perfil[0] == usuario and perfil[1] == 'senha':
+                perfil = perfil.split(';')
+                print(perfil)
+                if perfil[0] == usuario and perfil[1] == senha:
                     local = True
                     print('perfil encontrado')
-                    perfil = True
+                    temperfil = True
                     usuario = lc.Local(nome=perfil[3], endereco=perfil[4], tipomusical=perfil[5], ctt=perfil[6])
+                    return usuario
+                    break
                 else:
                     continue
-            if banda:
-                return(usuario)
-    if not perfil:
-        print('''\33[31mPerfil não encontrado!\33[m''')
-        reposta2 = menu.menu(['cadastrar', 'prosseguir sem cadastro'])
-        return(resposta2)
+            if not temperfil:
+                print('''\33[31mPerfil não encontrado!\33[m''')
+                reposta2 = menu.menu(['cadastrar', 'prosseguir sem cadastro'])
+                return(reposta2)
+            else:
+                print('usuário encontrado')

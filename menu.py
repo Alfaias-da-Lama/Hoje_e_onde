@@ -8,6 +8,6 @@ def menu(componentes):
     return(resposta)
 
 def titulo(mensagem):
-    mensagem.title()
+    mensagem = mensagem.title()
     parametro = len(mensagem) // 2
     print('=-'*(15-parametro), mensagem, '=-'*(15-parametro))
