@@ -27,9 +27,21 @@ def cadastro(arqbanda, arqlocal):
     while True:
         while True:
             senha = input('escolha uma senha: ')
+            certo = True
+            aviso = True
             if len(senha) < 8:
-                print('\33[ma senha precisa ter 8 caracteres ou mais\33[m')
-        confirmacao = input('repita sua senha: ')
+                print('\33[31ma senha precisa ter 8 caracteres ou mais\33[m')
+                certo = False
+            for a in senha:
+                if a in "~!@#$%^&*_-+=`|\()}{[]:;'<>,.?/" and aviso:
+                    print('\33[31msenha não pode conter caracteres especiais\33[m')
+                    certo = False
+                    aviso = False
+            if certo:
+                break
+            else:
+                continue
+        confirmacao = input('confirme sua senha: ')
         if senha == confirmacao:
             break
         else:
