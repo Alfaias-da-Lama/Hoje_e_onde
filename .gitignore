@@ -401,3 +401,6 @@ FodyWeavers.xsd
 *.csv
 *.xlsx
 *.txt
+
+#Specific arquives
+*testar.py

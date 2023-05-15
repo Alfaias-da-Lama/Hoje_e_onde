@@ -1,4 +1,9 @@
 import lcmolde as lc
+def validar_email(email):
+    from validate_email import validate_email
+    valido= validate_email(f'{email}', verify=True)
+    return(valido)
+
 def conferirarquivo(nome):
     existencia = True
     try:
@@ -22,6 +27,7 @@ def criararquivo(nome, cabeçalho):
     return(nome)
 
 def cadastro(arqbanda, arqlocal):
+    from validate_email import validate_email
     print('dados do cadastro')
     try:
         usuario = input('insira seu nome de usuário: ')
@@ -47,6 +53,14 @@ def cadastro(arqbanda, arqlocal):
                 break
             else:
                 print('\33[31msenhas não condizem\33[m')
+        while True:
+            email = input('insira seu email: ')
+            validacao = validate_email(email)
+            if validacao:
+                print('\33[32mE-mail válido\33[m')
+                break
+            else:
+                print('\33[31mInsira um e-mail válido\33[m')
         while True:
             tipo = input('qual o tipo de cadastro? [local] [artista]: ')
             if tipo != 'local' or tipo != 'artista':
@@ -121,14 +135,11 @@ def login(arqbanda, arqlocal):
     banda = False
     temperfil = False
     usuario = input('insira seu usuário: ')
-    print(usuario)
     senha = getpass(prompt='insira sua senha: ')
-    print(senha)
     with open(arqbanda, 'r', newline='', encoding='utf-8') as arquivo:
         perfis = arquivo.readlines()
         for perfil in perfis:
             perfil = perfil.split(';')
-            print(perfil)
             if perfil[0] == usuario and perfil[1] == senha:
                 banda = True
                 print('perfil encontrado')
@@ -160,3 +171,4 @@ def login(arqbanda, arqlocal):
                 return(reposta2)
             else:
                 print('usuário encontrado')
+
