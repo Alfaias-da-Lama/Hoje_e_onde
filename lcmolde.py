@@ -11,4 +11,4 @@ class Local:
         self.nome = nome
         self.endereco = endereco
         self.estilo = tipomusical
-        self.dadosctt = ctt
+        self.dadosctt = ctt 
