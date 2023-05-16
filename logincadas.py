@@ -1,4 +1,27 @@
 import lcmolde as lc
+def validaruser(usuario, arqlocal, arqbanda):
+    with open(arqbanda, 'r', encoding='utf-8') as arquivo:
+        arqsep = arquivo.readlines()
+        memoria = []
+        for a in arqsep:
+            memoria.append(a.split(';')[0])
+        memoria.pop(0)
+    with open(arqlocal, 'r', encoding='utf-8') as arquivo:
+        arqsep = arquivo.readlines()
+        cont = 0
+        for a in arqsep:
+            if cont >0:
+                memoria.append(a.split(';')[0])
+            else:
+                cont+=1
+    validação = True
+    for a in memoria:
+        if a == usuario:
+            validacao = False
+        else:
+            continue
+            return(validacao)
+
 def validar_email(email):
     from validate_email import validate_email
     valido= validate_email(f'{email}', verify=True)
@@ -30,7 +53,18 @@ def cadastro(arqbanda, arqlocal):
     from validate_email import validate_email
     print('dados do cadastro')
     try:
-        usuario = input('insira seu nome de usuário: ')
+        while True:
+            while True:
+                usuario = input('insira seu nome de usuário: ')
+                if usuario.isalpha():
+                    break
+                else:
+                    print('\33[31mEsperado pelo menos 1 letra no usuario\33[m')
+            if validaruser(usuario=usuario, arqlocal=arqlocal, arqbanda=arqbanda):
+                break
+            else:
+                print(f'ja existe um usuario com o cadastro {usuario}')
+                continue
         while True:
             while True:
                 senha = input('escolha uma senha: ')
