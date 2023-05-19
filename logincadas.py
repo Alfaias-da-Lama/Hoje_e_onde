@@ -1,4 +1,20 @@
 import lcmolde as lc
+def enviaremail(destinatario,usuario,senha):
+    import win32com.client as w3
+    integracao = w3.Dispatch('outlook.application')
+    email = integracao.CreateItem(0)
+    email.To = f'{destinatario}'
+    email.Subject = 'Recuperacao de senha'
+    email.HTMLBody = f"""
+    <p> Ola usuario {usuario}</p>
+    <p>voce solicitou uma recuperação de senha em nosso app Hoje é onde</p>
+    <p>sua senha é: {senha}</p>
+    <p>se ainda assim a sua senha não funcionar responda esse e-mail com o assunto: </p>
+    <p>ERRO DE SENHA </p>
+    <p> que alguem da equipe o atenderá</p>
+    <p> atensiosamente: Alfaias da Lama</p>"""
+    email.Send()
+
 def validaruser(usuario, arqlocal, arqbanda):
     with open(arqbanda, 'r', encoding='utf-8') as arquivo:
         arqsep = arquivo.readlines()
@@ -201,7 +217,7 @@ def login(arqbanda, arqlocal):
                     continue
             if not temperfil:
                 print('''\33[31mPerfil não encontrado!\33[m''')
-                reposta2 = menu.menu(['cadastrar', 'prosseguir sem cadastro'])
+                reposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
                 return(reposta2)
             else:
                 print('usuário encontrado')

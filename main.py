@@ -13,11 +13,17 @@ while True:
     else:
         break
 if resposta == 1:
-    resposta2 = lc.login(arqbanda, arqlocal)
-    if resposta2 == 1:
-        lc.cadastro(arqbanda, arqlocal)
-    elif resposta2 == 2:
-        pass
+    while True:
+        resposta2 = lc.login(arqbanda, arqlocal)
+        if resposta2 == 1:
+            continue
+        elif resposta2 == 2:
+            break
+            lc.cadastro(arqbanda, arqlocal)
+        elif resposta2 == 3:
+            pass
+        else:
+            break
 elif resposta == 2 or resposta2 == 1:
     lc.cadastro(arqbanda, arqlocal)
 elif resposta == 3 or resposta2 == 2:
