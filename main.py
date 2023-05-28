@@ -1,6 +1,7 @@
 import os
 import logincadas as lc
 import menu
+import sem_login
 arqbanda=lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
 arqlocal=lc.criararquivo(nome='perfilXlocais.csv', cabeçalho='usuario;senha;tipo;nome;endereço;tipomusical;contato')
 os.system('cls')
@@ -27,4 +28,4 @@ if resposta == 1:
 elif resposta == 2 or resposta2 == 1:
     lc.cadastro(arqbanda, arqlocal)
 elif resposta == 3 or resposta2 == 2:
-    pass
+   sem_login.opcoes_sem_login(resposta)
