@@ -188,20 +188,20 @@ def editar_agenda():
                 else:
                     f_temp.write(f'{linha}\n')
 
-            if encontrado:
-                with open('agenda.csv', 'w', encoding='utf8') as f, open('agenda_temp.csv', 'r', encoding='utf8') as f_temp:
-                    f.write(f'{f_temp.read()}\n')
+        if encontrado:
+            with open('agenda.csv', 'w', encoding='utf8') as f, open('agenda_temp.csv', 'r', encoding='utf8') as f_temp:
+                f.write(f'{f_temp.read()}\n')
 
-                with open('local_temp.csv', 'w') as f:
-                    pass
-            
-                print('Agenda atualizada com sucesso!')
-            
-            else:
-                with open('local_temp.csv', 'w') as f:
-                    pass
+            with open('local_temp.csv', 'w') as f:
+                pass
+        
+            print('Agenda atualizada com sucesso!')
+        
+        else:
+            with open('local_temp.csv', 'w') as f:
+                pass
 
-                print('Nenhum show da agenda no seu local encontrado!')
+            print('Nenhum show da agenda no seu local encontrado!')
 
     except:
         print('ERRO DO SISTEMA')
