@@ -1,5 +1,6 @@
 import os 
 import time
+import sys
 
 def clear():
     return os.system("cls")
@@ -80,7 +81,7 @@ def menu_principal(): #página principal do local (alterar depois)
         elif decisao == 5:
             time.sleep(0.43)
             print('Fim do Programa!')
-            exit()
+            sys.exit()
         else:
             print('Opção inválida!')
             time.sleep(1.5)
@@ -317,7 +318,7 @@ def ver_agenda():
             for linha in linhas:
                 dados = linha.strip().split(';')
 
-                print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Hora início: {dados[3]} // Hora fim: {dados[4]}')
+                print(f'ID: {dados[0]} // Banda: {dados[1]} // Local: {dados[2]} // Data: {dados[3]} // Hora início: {dados[4]} // Hora fim: {dados[5]}')
         f.close()
         input('Aperte enter para voltar: ')
         return menu_agenda()
@@ -331,14 +332,28 @@ def adicionar_agenda(): #adicionar um show na agenda
     try:
         global nome
         clear()
+
+        with open('agenda.csv', 'a') as f:
+            f.close()
+
+        with open('agenda.csv', 'r', encoding='utf8') as f:
+            linhas = f.readlines()
+
+            if linhas:
+                ultimo_indice = int(linhas[-1].split(';')[0])
+                indice = ultimo_indice + 1
+            else:
+                indice = 1
+            f.close()
+
         with open('agenda.csv', 'a', encoding='utf8') as f:
             banda = input('Digite o nome da banda: ')
             data = input('Digite a data: ')
             hora_i = input('Digite o horário de início: ')
             hora_f = input('Digite o horário de encerramento: ')
 
-            f.write(f'{banda};{nome};{data};{hora_i};{hora_f};\n')
-        f.close()
+            f.write(f'{indice};{banda};{nome};{data};{hora_i};{hora_f};\n')
+            f.close()
         loading()
         return menu_agenda()
 
@@ -355,45 +370,48 @@ def editar_agenda():
         encontrado = False
         with open('agenda.csv', 'r', encoding='utf8') as f, open('agenda_temp.csv', 'w', encoding='utf8') as f_temp:
             linhas = f.readlines()
-            banda = input('Digite o nome da atração do show: ').lower()
+            índice = input('Digite o ID do show a ser alterado: ')
             
             for linha in linhas:
                 dados = linha.strip().split(';')
 
-                if banda == dados[0].lower() and nome == dados[1]:
+                if índice == dados[0] and nome == dados[2]:
                     encontrado = True
 
-                    print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Hora início: {dados[3]} // Hora fim: {dados[4]}')
+                    print(f'Banda: {dados[1]} // Local: {dados[2]} // Data: {dados[3]} // Hora início: {dados[4]} // Hora fim: {dados[5]}')
                     decisao = input('Qual informação deseja editar: ').lower()
 
                     if decisao == 'banda':
                         nova_banda = input('Digite o nome da nova atração: ')
                         if nova_banda == '':
-                            nova_banda = dados[0]
-                        linha = f'{nova_banda};{dados[1]};{dados[2]};{dados[3]};{dados[4]};'
+                            nova_banda = dados[1]
+                        linha = f'{dados[0]};{nova_banda};{dados[2]};{dados[3]};{dados[4]};{dados[5]};'
                     
                     elif decisao == 'local':
                         novo_local = input('Digite o novo local: ')
                         if novo_local == '':
-                            novo_local = dados[1]
-                        linha = f'{dados[0]};{novo_local};{dados[2]};{dados[3]};{dados[4]};'
+                            novo_local = dados[2]
+                        linha = f'{dados[0]};{dados[1]};{novo_local};{dados[3]};{dados[4]};{dados[5]};'
                     
                     elif decisao == 'data':
                         nova_data = input('Digite a nova data (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{nova_data};{dados[3]};{dados[4]};'
+                        linha = f'{dados[0]};{dados[1]};{dados[2]};{nova_data};{dados[4]};{dados[5]};'
                     
                     elif decisao == 'hora início':
                         novo_hora_i = input('Digite o novo horário de início (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{novo_hora_i};{dados[4]};'
+                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_hora_i};{dados[5]};'
                     
                     elif decisao == 'hora fim':
                         novo_hora_f = input('Digite o novo horário de encerramento (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_hora_f};'
-                    
+                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{dados[4]};{novo_hora_f};'
                     else:
-                       linha = f'{linha}'
+                        linha = 'f{linha}'
+                    f_temp.write(f'{linha}\n')
+                    
+                else:
+                    f_temp.write(f'{linha}')
                 
-                f_temp.write(f'{linha}')
+                
         f.close()
         f_temp.close()
         if encontrado:
@@ -403,18 +421,18 @@ def editar_agenda():
             f.close()
             f_temp.close()
 
-            with open('local_temp.csv', 'w') as f:
+            with open('agenda_temp.csv', 'w') as f:
                 pass
             f.close()
         
             print('Agenda atualizada com sucesso!')
         
         else:
-            with open('local_temp.csv', 'w') as f:
+            with open('agenda_temp.csv', 'w') as f:
                 pass
             f.close()
 
-            print('Nenhum show correspondente encontrado!')
+            print('Nenhum show correspondente no seu local encontrado!')
         
         input('Aperte enter para voltar: ')
         return menu_agenda()
