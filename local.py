@@ -10,8 +10,15 @@ def loading():
     print("Carregando...")
     time.sleep(1.5)
 
+  
+nome = 'KFC' #nome do local (alterar depois) 
 
-global nome #nome do local (alterar depois)   
+
+def iniciar_menu_perfil(nome_local): #pegar o nome do local no código de login
+    global nome
+    nome = nome_local
+    return menu_perfil()
+
 
 def menu_perfil(): #página inicial do local (alterar depois)
     try:
@@ -47,7 +54,7 @@ def menu_perfil(): #página inicial do local (alterar depois)
         return menu_perfil()
 
 
-def menu_principal(): #página principal do local (aterar depois)
+def menu_principal(): #página principal do local (alterar depois)
     try:
         clear()
         print('[1]: Menu Perfil')
@@ -83,7 +90,7 @@ def menu_principal(): #página principal do local (aterar depois)
 def menu_agenda(): #menu das funções da agenda (alterar depois)
     try:
         clear()
-        print('[1]: Criar Agenda')
+        print('[1]: Criar Show na Agenda')
         print('[2]: Ver Agenda')
         print('[3]: Editar Agenda')
         print('[4]: Menu Principal')
@@ -115,6 +122,7 @@ def menu_agenda(): #menu das funções da agenda (alterar depois)
 
 def ver_perfil():
     try:
+        global nome
         clear()
         with open('local.csv', 'r', encoding='utf8') as f:
             encontrado = False
@@ -134,7 +142,7 @@ def ver_perfil():
         return menu_perfil()
             
         
-    except FileNotFoundError:
+    except:
         print('ERRO DO SISTEMA (arquivo inexistente)')
         time.sleep(1.5)
         return menu_perfil() #voltar para o menu
@@ -142,25 +150,43 @@ def ver_perfil():
 
 def adicionar_informacoes(): #adicionar informações do próprio perfil
     try:
+        global nome
         clear()
-        with open('local.csv', 'a', encoding='utf8') as f:
-            tipo = input('Digite o tipo do local: ')
-            endereco = input('Digite o endereço do local: ')
-            tipo_musical = input('Digite o tipo musical de preferência do local: ')
-            contato = input('Digite as informações de contato: ')
+        with open('local.csv', 'r', encoding='utf8') as f:
+            encontrado = False
 
-            f.write(f'{nome};{tipo};{endereco};{tipo_musical};{contato}\n')
+            linhas = f.readlines()
 
-        f.close()
-        loading()
-        return menu_perfil()
-    except:
+            for linha in linhas:
+                dados = linha.strip().split(';')
+                if nome == dados[0]:
+                    encontrado = True
+                    print('Perfil já existente!')
+                    f.close()
+                    time.sleep(1.5)
+                    return menu_perfil()
+
+            if not encontrado:
+                f.close()
+                with open('local.csv', 'a', encoding='utf8') as f:
+                    tipo = input('Digite o tipo do local: ')
+                    endereco = input('Digite o endereço do local: ')
+                    tipo_musical = input('Digite o tipo musical de preferência do local: ')
+                    contato = input('Digite as informações de contato: ')
+
+                    f.write(f'{nome};{tipo};{endereco};{tipo_musical};{contato}\n')
+
+                    f.close()
+                    loading()
+                    return menu_perfil()
+    except FileNotFoundError:
         print('ERRO DO SISTEMA')
         time.sleep(1.5)
         return menu_perfil() #voltar para o menu
 
 def editar_perfil():
     try:
+        global nome
         clear()
         encontrado = False
         with open('local.csv', 'r', encoding='utf8') as f, open('local_temp.csv', 'w', encoding='utf8') as f_temp:
@@ -179,6 +205,7 @@ def editar_perfil():
                         if novo_nome == '':
                             novo_nome = dados[0]
                         f_temp.write(f'{novo_nome};{dados[1]};{dados[2]};{dados[3]};{dados[4]}')
+                        nome = novo_nome
                     
                     elif decisao == 'tipo':
                         novo_tipo = input('Digite o novo tipo do local (ou deixe em branco para apagar): ')
@@ -266,9 +293,9 @@ def ver_bandas(): #ver todas as bandas
                 dados = linha.strip().split(';')
 
                 print(f'Nome: {dados[0]} // Tipo: {dados[1]} // Integrantes: {dados[2]} // Tipo musical: {dados[3]} // Contato: {dados[4]}')
-            f.close()
-            input('Aperte enter para voltar: ')
-            return menu_principal()
+        f.close()
+        input('Aperte enter para voltar: ')
+        return menu_principal()
 
     except FileNotFoundError:
         print('ERRO DO SISTEMA (arquivo inexistente)')
@@ -285,7 +312,7 @@ def ver_agenda():
             for linha in linhas:
                 dados = linha.strip().split(';')
 
-                print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Horário de início: {dados[3]} // Horário de encerramento: {dados[4]}')
+                print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Hora início: {dados[3]} // Hora fim: {dados[4]}')
         f.close()
         input('Aperte enter para voltar: ')
         return menu_agenda()
@@ -297,6 +324,7 @@ def ver_agenda():
 
 def adicionar_agenda(): #adicionar um show na agenda
     try:
+        global nome
         clear()
         with open('agenda.csv', 'a', encoding='utf8') as f:
             banda = input('Digite o nome da banda: ')
@@ -304,7 +332,7 @@ def adicionar_agenda(): #adicionar um show na agenda
             hora_i = input('Digite o horário de início: ')
             hora_f = input('Digite o horário de encerramento: ')
 
-            f.write(f'{banda};{nome};{data};{hora_i};{hora_f}\n')
+            f.write(f'{banda};{nome};{data};{hora_i};{hora_f};\n')
         f.close()
         loading()
         return menu_agenda()
@@ -317,6 +345,7 @@ def adicionar_agenda(): #adicionar um show na agenda
 
 def editar_agenda():
     try:
+        global nome
         clear()
         encontrado = False
         with open('agenda.csv', 'r', encoding='utf8') as f, open('agenda_temp.csv', 'w', encoding='utf8') as f_temp:
@@ -329,32 +358,32 @@ def editar_agenda():
                 if banda == dados[0] and nome == dados[1]:
                     encontrado = True
 
-                    print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Horário de início: {dados[3]} // Horário de encerramento: {dados[4]}')
+                    print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Hora início: {dados[3]} // Hora fim: {dados[4]}')
                     decisao = input('Qual informação deseja editar: ').lower()
 
                     if decisao == 'banda':
-                        nova_banda = input('Digite o novo nome da atração: ')
+                        nova_banda = input('Digite o nome da nova atração: ')
                         if nova_banda == '':
                             nova_banda = dados[0]
-                        linha = f'{nova_banda};{dados[1]};{dados[2]};{dados[3]};{dados[4]}'
+                        linha = f'{nova_banda};{dados[1]};{dados[2]};{dados[3]};{dados[4]};'
                     
                     elif decisao == 'local':
                         novo_local = input('Digite o novo local: ')
                         if novo_local == '':
                             novo_local = dados[1]
-                        linha = f'{dados[0]};{novo_local};{dados[2]};{dados[3]};{dados[4]}'
+                        linha = f'{dados[0]};{novo_local};{dados[2]};{dados[3]};{dados[4]};'
                     
                     elif decisao == 'data':
                         nova_data = input('Digite a nova data (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{nova_data};{dados[3]};{dados[4]}'
+                        linha = f'{dados[0]};{dados[1]};{nova_data};{dados[3]};{dados[4]};'
                     
-                    elif decisao == 'horário de início':
+                    elif decisao == 'hora início':
                         novo_hora_i = input('Digite o novo horário de início (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{novo_hora_i};{dados[4]}'
+                        linha = f'{dados[0]};{dados[1]};{dados[2]};{novo_hora_i};{dados[4]};'
                     
-                    elif decisao == 'horário de encerramento':
+                    elif decisao == 'hora fim':
                         novo_hora_f = input('Digite o novo horário de encerramento (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_hora_f}'
+                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_hora_f};'
                     
                     else:
                        linha = f'{linha}'
