@@ -2,8 +2,10 @@ import os
 import logincadas as lc
 import menu
 import sem_login
+import banda as bd
 arqbanda=lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
 arqlocal=lc.criararquivo(nome='perfilXlocais.csv', cabeçalho='usuario;senha;tipo;nome;endereço;tipomusical;contato')
+arqagenda=lc.criararquivo(nome='agenda.csv', cabeçalho='banda;local;data;horastart;horaend')
 os.system('cls')
 while True:
     resposta = menu.menu2('Tela de cadastro', ['Login', 'Cadastro', 'Prosseguir sem logar'])
@@ -16,16 +18,18 @@ while True:
 if resposta == 1:
     while True:
         resposta2 = lc.login(arqbanda, arqlocal)
-        if resposta2 == 1:
+        if resposta2[0] == 1:
             continue
-        elif resposta2 == 2:
+        elif resposta2[0] == 2:
             break
             lc.cadastro(arqbanda, arqlocal)
-        elif resposta2 == 3:
-            pass
+        elif resposta2[0] == 3:
+            break
         else:
             break
-elif resposta == 2 or resposta2 == 1:
+elif resposta == 2 or resposta2[0] == 1:
     lc.cadastro(arqbanda, arqlocal)
-elif resposta == 3 or resposta2 == 2:
+elif resposta == 3 or resposta2[0] == 2:
    sem_login.opcoes_sem_login(resposta)
+if resposta2[0] == 'banda':
+    bd.pagina_de_banda(usuario=resposta2[1])

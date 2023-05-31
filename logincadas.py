@@ -1,4 +1,5 @@
 import lcmolde as lc
+import menu
 def enviaremail(destinatario,usuario,senha):
     import win32com.client as w3
     integracao = w3.Dispatch('outlook.application')
@@ -30,13 +31,15 @@ def validaruser(usuario, arqlocal, arqbanda):
                 memoria.append(a.split(';')[0])
             else:
                 cont+=1
-    validação = True
+    validacao = True
     for a in memoria:
         if a == usuario:
+            print(a)
+            print(usuario)
             validacao = False
         else:
             continue
-            return(validacao)
+    return(validacao)
 
 def validar_email(email):
     from validate_email import validate_email
@@ -113,7 +116,8 @@ def cadastro(arqbanda, arqlocal):
                 print('\33[31mInsira um e-mail válido\33[m')
         while True:
             tipo = input('qual o tipo de cadastro? [local] [artista]: ')
-            if tipo != 'local' or tipo != 'artista':
+            print(tipo)
+            if tipo != 'local' and tipo != 'artista':
                 print('\33[31mSelecione uma opção acima\33[m')
             else:
                 break
@@ -160,6 +164,7 @@ def cadastro(arqbanda, arqlocal):
             nomelocal = input('insira o nome do seu local: ')
             endereço = input('insira o endereço do local: ')
             estilo = input('insira o estilo musical de preferencia do local: ')
+            tipo = input('insira o tipo do seu local [bar, restaurante, casa de show]: ')
             ctt = []
             while True:
                 contato = input('insira um contato email ou celular, ou 0 para encerrar')
@@ -179,46 +184,41 @@ def cadastro(arqbanda, arqlocal):
         print('\33[merro ao cadastrar\33[m')
 
 def login(arqbanda, arqlocal):
-    import lcmolde as lc
     from getpass import getpass
-    import menu
     banda = False
     temperfil = False
-    usuario = input('insira seu usuário: ')
-    senha = getpass(prompt='insira sua senha: ')
+    user = input('insira seu usuário: ')
+    password = getpass(prompt='insira sua senha: ')
     with open(arqbanda, 'r', newline='', encoding='utf-8') as arquivo:
         perfis = arquivo.readlines()
         for perfil in perfis:
             perfil = perfil.split(';')
-            if perfil[0] == usuario and perfil[1] == senha:
+            if perfil[0] == user and perfil[1] == password:
                 banda = True
-                print('perfil encontrado')
                 temperfil = True
-                usuario = lc.Banda(nomedabanda=perfil[3], integrantes=perfil[4], bairro=perfil[5], tipomusical=perfil[6], ctt=perfil[7])
-                return(usuario)
+                usuario = lc.Banda(perfil=perfil)
+                return(["banda", usuario])
                 break
             else:
                 continue
     if not banda:
         with open(arqlocal, 'r', newline='', encoding='utf-8') as arquivo:
             perfis = arquivo.readlines()
-            print('tentando local')
             for perfil in perfis:
                 perfil = perfil.split(';')
-                print(perfil)
-                if perfil[0] == usuario and perfil[1] == senha:
+                if perfil[0] == user and perfil[1] == password:
                     local = True
                     print('perfil encontrado')
                     temperfil = True
-                    usuario = lc.Local(nome=perfil[3], endereco=perfil[4], tipomusical=perfil[5], ctt=perfil[6])
-                    return(usuario)
+                    usuario = lc.Local(perfil=perfil)
+                    return(["local", usuario])
                     break
                 else:
                     continue
             if not temperfil:
                 print('''\33[31mPerfil não encontrado!\33[m''')
                 reposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
-                return(reposta2)
+                return([reposta2])
             else:
                 print('usuário encontrado')
 

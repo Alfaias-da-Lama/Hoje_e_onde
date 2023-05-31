@@ -37,7 +37,7 @@ def editar_perfil():
     try:
         encontrado = False
         with open('local.csv', 'r', encoding='utf8') as f, open('local_temp.csv', 'w', encoding='utf8') as f_temp:
-            linhas = f.readlines()
+            linhas = f_temp.readlines()
 
             for linha in linhas:
                 dados = linha.strip().split(';')

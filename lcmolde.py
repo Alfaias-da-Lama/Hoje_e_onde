@@ -1,14 +1,20 @@
 class Banda:
-    def __init__(self, nomedabanda, integrantes, bairro, tipomusical, ctt):
-        self.nome = nomedabanda
-        self.integrantes = integrantes
-        self.endereço = bairro
-        self.estilo = tipomusical
-        self.dadosctt = ctt
+    def __init__(self, perfil):
+        self.usuario = perfil[0]
+        self.senha = perfil[1]
+        self.tipo = perfil[2]
+        self.nome = perfil[3]
+        self.integrantes = perfil[4]
+        self.endereco = perfil[5]
+        self.tipo_musical = perfil[6]
+        self.contato = perfil[7]
 
 class Local:
-    def __init__(self, nome, endereco, tipomusical, ctt):
-        self.nome = nome
-        self.endereco = endereco
-        self.estilo = tipomusical
-        self.dadosctt = ctt 
+    def __init__(self, perfil):
+        self.usuario = perfil[0]
+        self.senha = perfil[1]
+        self.tipo = perfil[2]
+        self.nome = perfil[3]
+        self.endereco = perfil[4]
+        self.tipo_musical = perfil[5]
+        self.ctt = perfil[6]
