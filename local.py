@@ -11,7 +11,7 @@ def loading():
     time.sleep(1.5)
 
   
-nome = 'KFC' #nome do local (alterar depois) 
+nome = 'Teste' #nome do local (alterar depois) 
 
 
 def iniciar_menu_perfil(nome_local): #pegar o nome do local no código de login
@@ -61,6 +61,7 @@ def menu_principal(): #página principal do local (alterar depois)
         print('[2]: Ver Locais')
         print('[3]: Ver Bandas')
         print('[4]: Menu Agenda')
+        print('[5]: Sair')
 
         decisao = int(input('Digite o que deseja fazer: '))
 
@@ -76,6 +77,10 @@ def menu_principal(): #página principal do local (alterar depois)
         elif decisao == 4:
             loading()
             return menu_agenda()
+        elif decisao == 5:
+            time.sleep(0.43)
+            print('Fim do Programa!')
+            exit()
         else:
             print('Opção inválida!')
             time.sleep(1.5)
@@ -350,12 +355,12 @@ def editar_agenda():
         encontrado = False
         with open('agenda.csv', 'r', encoding='utf8') as f, open('agenda_temp.csv', 'w', encoding='utf8') as f_temp:
             linhas = f.readlines()
-            banda = input('Digite o nome da atração do show: ')
+            banda = input('Digite o nome da atração do show: ').lower()
             
             for linha in linhas:
                 dados = linha.strip().split(';')
 
-                if banda == dados[0] and nome == dados[1]:
+                if banda == dados[0].lower() and nome == dados[1]:
                     encontrado = True
 
                     print(f'Banda: {dados[0]} // Local: {dados[1]} // Data: {dados[2]} // Hora início: {dados[3]} // Hora fim: {dados[4]}')
