@@ -158,6 +158,10 @@ def adicionar_informacoes(): #adicionar informações do próprio perfil
     try:
         global nome
         clear()
+
+        with open('local.csv', 'a', encoding='utf8') as f:
+            f.close()
+
         with open('local.csv', 'r', encoding='utf8') as f:
             encontrado = False
 
@@ -180,7 +184,7 @@ def adicionar_informacoes(): #adicionar informações do próprio perfil
                     tipo_musical = input('Digite o tipo musical de preferência do local: ')
                     contato = input('Digite as informações de contato: ')
 
-                    f.write(f'{nome};{tipo};{endereco};{tipo_musical};{contato}\n')
+                    f.write(f'{nome};{tipo};{endereco};{tipo_musical};{contato};\n')
 
                     f.close()
                     loading()
@@ -210,24 +214,24 @@ def editar_perfil():
                         novo_nome = input('Digite o novo nome do local: ')
                         if novo_nome == '':
                             novo_nome = dados[0]
-                        f_temp.write(f'{novo_nome};{dados[1]};{dados[2]};{dados[3]};{dados[4]}')
+                        f_temp.write(f'{novo_nome};{dados[1]};{dados[2]};{dados[3]};{dados[4]};\n')
                         nome = novo_nome
                     
                     elif decisao == 'tipo':
                         novo_tipo = input('Digite o novo tipo do local (ou deixe em branco para apagar): ')
-                        f_temp.write(f'{dados[0]};{novo_tipo};{dados[2]};{dados[3]};{dados[4]}')
+                        f_temp.write(f'{dados[0]};{novo_tipo};{dados[2]};{dados[3]};{dados[4]}\n')
                     
                     elif decisao == 'endereço':
                         novo_endereco = input('Digite o novo endereço do local (ou deixe em branco para apagar): ')
-                        f_temp.write(f'{dados[0]};{dados[1]};{novo_endereco};{dados[3]};{dados[4]}')
+                        f_temp.write(f'{dados[0]};{dados[1]};{novo_endereco};{dados[3]};{dados[4]}\n')
                     
                     elif decisao == 'tipo musical':
                         novo_musica = input('Digite o novo tipo musical de preferência (ou deixe em branco para apagar): ')
-                        f_temp.write(f'{dados[0]};{dados[1]};{dados[2]};{novo_musica};{dados[4]}')
+                        f_temp.write(f'{dados[0]};{dados[1]};{dados[2]};{novo_musica};{dados[4]}\n')
                     
                     elif decisao == 'contato':
                         novo_contato = input('Digite os novos dados de contato (ou deixe em branco para apagar): ')
-                        f_temp.write(f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_contato}')
+                        f_temp.write(f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_contato}\n')
                     
                     else:
                         print('Opção inválida!')
@@ -236,6 +240,9 @@ def editar_perfil():
                 
                 else:
                     f_temp.write(f'{linha}')
+            
+            if not encontrado:
+                print('Perfil do local não encontrado!')
 
         f.close()
         f_temp.close()
