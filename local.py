@@ -10,11 +10,8 @@ def loading():
     print("Carregando...")
     time.sleep(1.5)
 
-  
-nome = 'Teste' #nome do local (alterar depois) 
 
-
-def iniciar_menu_perfil(nome_local): #pegar o nome do local no código de login
+def iniciar_menu_perfil(nome_local='perfilXlocais.csv'): #pegar o nome do local no código de login
     global nome
     nome = nome_local
     return menu_perfil()
@@ -327,6 +324,7 @@ def ver_agenda():
         time.sleep(1.5)
         return menu_agenda() #voltar para o menu
 
+
 def adicionar_agenda(): #adicionar um show na agenda
     try:
         global nome
@@ -424,4 +422,3 @@ def editar_agenda():
         time.sleep(1.5)
         return menu_agenda() #voltar para o menu
     
-menu_principal()

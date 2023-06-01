@@ -3,6 +3,8 @@ import logincadas as lc
 import menu
 import sem_login
 import banda as bd
+import local as lo
+import time
 arqbanda=lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
 arqlocal=lc.criararquivo(nome='perfilXlocais.csv', cabeçalho='usuario;senha;tipo;nome;endereço;tipomusical;contato')
 arqagenda=lc.criararquivo(nome='agenda.csv', cabeçalho='banda;local;data;horastart;horaend')
@@ -33,3 +35,5 @@ elif resposta == 3 or resposta2[0] == 2:
    sem_login.opcoes_sem_login(resposta)
 if resposta2[0] == 'banda':
     bd.pagina_de_banda(usuario=resposta2[1])
+elif resposta2[0] == 'local':
+    lo.menu_principal()
