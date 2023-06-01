@@ -265,8 +265,6 @@ def editar_perfil():
                 pass
             f.close()
 
-            print('Perfil do local não encontrado')
-
         input('Aperte enter para voltar: ')
         return menu_perfil()
     
