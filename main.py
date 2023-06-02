@@ -24,13 +24,12 @@ if resposta == 1:
             continue
         elif resposta2[0] == 2:
             break
-            lc.cadastro(arqbanda, arqlocal)
         elif resposta2[0] == 3:
             break
         else:
             break
 elif resposta == 2 or resposta2[0] == 1:
-    lc.cadastro(arqbanda, arqlocal)
+    resposta2=lc.cadastro(arqbanda, arqlocal)
 elif resposta == 3 or resposta2[0] == 2:
    sem_login.opcoes_sem_login(resposta)
 if resposta2[0] == 'banda':

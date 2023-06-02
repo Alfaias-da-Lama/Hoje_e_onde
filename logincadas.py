@@ -115,13 +115,12 @@ def cadastro(arqbanda, arqlocal):
             else:
                 print('\33[31mInsira um e-mail válido\33[m')
         while True:
-            tipo = input('qual o tipo de cadastro? [local] [artista]: ')
-            print(tipo)
-            if tipo != 'local' and tipo != 'artista':
+            escolha = input('qual o tipo de cadastro? [local] [artista]: ')
+            if escolha != 'local' and escolha != 'artista':
                 print('\33[31mSelecione uma opção acima\33[m')
             else:
                 break
-        if tipo == 'artista':
+        if escolha == 'artista':
             grupo = input('voce é artista [solo] ou tem [banda]?')
             if grupo == 'banda':
                 nomebanda = input('qual o nome da sua banda: ')
@@ -160,7 +159,9 @@ def cadastro(arqbanda, arqlocal):
                 print('\33[31mErro ao cadastrar, tente novamente\33[m')
             else:
                 print('\33[33mCadastro realizado com sucesso!\33[m')
-        elif tipo == 'local':
+                user = lc.Banda([usuario,senha,tipo,nomebanda,integrantes,bairro,estilo,ctt])
+                return(['banda',user])
+        elif escolha == 'local':
             nomelocal = input('insira o nome do seu local: ')
             endereço = input('insira o endereço do local: ')
             estilo = input('insira o estilo musical de preferencia do local: ')
@@ -180,6 +181,8 @@ def cadastro(arqbanda, arqlocal):
                 print('\33[31mErro ao cadastrar, tente novamente\33[m')
             else:
                 print('\33[33mCadastro realizado com sucesso!\33[m')
+                user = lc.Local([usuario,senha,tipo,nomelocal,endereço,estilo,ctt])
+                return('banda', user)
     except:
         print('\33[merro ao cadastrar\33[m')
 
