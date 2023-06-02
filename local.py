@@ -1,6 +1,7 @@
 import os 
 import time
 import sys
+import datetime
 
 def clear():
     return os.system("cls")
@@ -318,12 +319,14 @@ def ver_agenda():
     try:
         clear()
         with open('agenda.csv', 'r', encoding='utf8') as f:
+            data_hoje = datetime.datetime.now().date()
             linhas = f.readlines()
 
             for linha in linhas:
                 dados = linha.strip().split(';')
-
-                print(f'ID: {dados[0]} // Banda: {dados[1]} // Local: {dados[2]} // Data: {dados[3]} // Hora início: {dados[4]} // Hora fim: {dados[5]}')
+                data_eventos = datetime.datetime.strptime(dados[3], '%d/%m/%Y').date()
+                if data_hoje <= data_eventos:
+                    print(f'ID: {dados[0]} // Banda: {dados[1]} // Local: {dados[2]} // Data: {dados[3]} // Hora início: {dados[4]} // Hora fim: {dados[5]}')
         f.close()
         input('Aperte enter para voltar: ')
         return menu_agenda()
@@ -374,48 +377,50 @@ def editar_agenda():
         clear()
         encontrado = False
         with open('agenda.csv', 'r', encoding='utf8') as f, open('agenda_temp.csv', 'w', encoding='utf8') as f_temp:
+            data_hoje = datetime.datetime.now().date()
             linhas = f.readlines()
             índice = input('Digite o ID do show a ser alterado: ')
             
             for linha in linhas:
                 dados = linha.strip().split(';')
+                data_eventos = datetime.datetime.strptime(dados[3], '%d/%m/%Y').date()
+                if data_hoje <= data_eventos:
+                    if índice == dados[0] and nome == dados[2]:
+                        encontrado = True
 
-                if índice == dados[0] and nome == dados[2]:
-                    encontrado = True
+                        print(f'Banda: {dados[1]} // Local: {dados[2]} // Data: {dados[3]} // Hora início: {dados[4]} // Hora fim: {dados[5]}')
+                        decisao = input('Qual informação deseja editar: ').lower()
 
-                    print(f'Banda: {dados[1]} // Local: {dados[2]} // Data: {dados[3]} // Hora início: {dados[4]} // Hora fim: {dados[5]}')
-                    decisao = input('Qual informação deseja editar: ').lower()
-
-                    if decisao == 'banda':
-                        nova_banda = input('Digite o nome da nova atração: ')
-                        if nova_banda == '':
-                            nova_banda = dados[1]
-                        linha = f'{dados[0]};{nova_banda};{dados[2]};{dados[3]};{dados[4]};{dados[5]};'
-                    
-                    elif decisao == 'local':
-                        novo_local = input('Digite o novo local: ')
-                        if novo_local == '':
-                            novo_local = dados[2]
-                        linha = f'{dados[0]};{dados[1]};{novo_local};{dados[3]};{dados[4]};{dados[5]};'
-                    
-                    elif decisao == 'data':
-                        nova_data = input('Digite a nova data (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{nova_data};{dados[4]};{dados[5]};'
-                    
-                    elif decisao == 'hora início':
-                        novo_hora_i = input('Digite o novo horário de início (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_hora_i};{dados[5]};'
-                    
-                    elif decisao == 'hora fim':
-                        novo_hora_f = input('Digite o novo horário de encerramento (ou deixe em branco para apagar): ')
-                        linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{dados[4]};{novo_hora_f};'
+                        if decisao == 'banda':
+                            nova_banda = input('Digite o nome da nova atração: ')
+                            if nova_banda == '':
+                                nova_banda = dados[1]
+                            linha = f'{dados[0]};{nova_banda};{dados[2]};{dados[3]};{dados[4]};{dados[5]};'
+                        
+                        elif decisao == 'local':
+                            novo_local = input('Digite o novo local: ')
+                            if novo_local == '':
+                                novo_local = dados[2]
+                            linha = f'{dados[0]};{dados[1]};{novo_local};{dados[3]};{dados[4]};{dados[5]};'
+                        
+                        elif decisao == 'data':
+                            nova_data = input('Digite a nova data (ou deixe em branco para apagar): ')
+                            linha = f'{dados[0]};{dados[1]};{dados[2]};{nova_data};{dados[4]};{dados[5]};'
+                        
+                        elif decisao == 'hora início':
+                            novo_hora_i = input('Digite o novo horário de início (ou deixe em branco para apagar): ')
+                            linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{novo_hora_i};{dados[5]};'
+                        
+                        elif decisao == 'hora fim':
+                            novo_hora_f = input('Digite o novo horário de encerramento (ou deixe em branco para apagar): ')
+                            linha = f'{dados[0]};{dados[1]};{dados[2]};{dados[3]};{dados[4]};{novo_hora_f};'
+                        else:
+                            linha = 'f{linha}'
+                        f_temp.write(f'{linha}\n')
+                        
                     else:
-                        linha = 'f{linha}'
-                    f_temp.write(f'{linha}\n')
+                        f_temp.write(f'{linha}')
                     
-                else:
-                    f_temp.write(f'{linha}')
-                
                 
         f.close()
         f_temp.close()
