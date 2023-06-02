@@ -1,3 +1,5 @@
+import datetime
+
 def remover_acentos(texto):
     acentos = {
         'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a', 'ä': 'a', 'Á': 'A', 'À': 'A', 'Ã': 'A', 'Â': 'A', 'Ä': 'A',
@@ -72,26 +74,30 @@ def filtrar_locais(nome):
 def ver_agenda(nome):
     try:
         file = open(nome, 'r')
+        data_hoje = datetime.datetime.now().date()
         for linha in file:
             dados_linha = linha.split(';')
             dados_linha[4] = dados_linha[4].replace('\n', '')
-            print(f'{dados_linha[0]:^15}{dados_linha[1]:^15}{dados_linha[2]:^15}{dados_linha[3]:^15}{dados_linha[4]:^15}')
+            data_eventos = datetime.datetime.strptime(dados_linha[3], '%d/%m/%Y').date()
+            if data_hoje <= data_eventos:
+                print(f'{dados_linha[1]:^15}{dados_linha[2]:^15}{dados_linha[3]:^15}{dados_linha[4]:^15}{dados_linha[5]:^15}')
     except FileNotFoundError:
         return "Deu erro na busca de arquivo"
     
-
 def filtrar_agenda(nome):
     try:
         filtro = str(input("Digite a sua pesquisa: "))
         file = open(nome, "r")
         print(f'{"Banda":^15}{"Local":^15}{"Data":^15}{"Horário Início":^15}{"Horário Encerramento":^15}')
         encontrado = False
+        data_hoje = datetime.datetime.now().date()
         for linha in file:
             dados_linha = linha.lower().split(';')
             dados_linha[4] = dados_linha[4].replace('\n', '')
+            data_eventos = datetime.datetime.strptime(dados_linha[3], '%d/%m/%Y').date()
             for j in dados_linha:
-                if remover_acentos(j) == remover_acentos(filtro):
-                    print(f'{dados_linha[0]:^15}{dados_linha[1]:^15}{dados_linha[2]:^15}{dados_linha[3]:^15}{dados_linha[4]:^15}')
+                if remover_acentos(j) == remover_acentos(filtro) and data_hoje <= data_eventos:
+                    print(f'{dados_linha[1]:^15}{dados_linha[2]:^15}{dados_linha[3]:^15}{dados_linha[4]:^15}{dados_linha[5]:^15}')
                     encontrado = True
         if not encontrado:
             print('Não existe agenda de acordo com a sua pesquisa')
@@ -118,4 +124,3 @@ def opcoes_sem_login(resposta):
             filtrar_locais(nome='perfilXlocais.csv')
         elif res1.lower() == 'bandas':
             filtrar_bandas(nome='perfilXbandas.csv')
-
