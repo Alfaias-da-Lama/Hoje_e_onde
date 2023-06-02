@@ -237,7 +237,7 @@ def editar_perfil():
                     else:
                         print('Opção inválida!')
                         time.sleep(1.5)
-                        return editar_perfil
+                        return editar_perfil()
                 
                 else:
                     f_temp.write(f'{linha}')
