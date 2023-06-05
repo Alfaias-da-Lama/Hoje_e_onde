@@ -18,3 +18,8 @@ class Local:
         self.endereco = perfil[4]
         self.tipo_musical = perfil[5]
         self.ctt = perfil[6]
+
+class Publico:
+    def __init__(self, perfil):
+        self.usuario = perfil[0]
+        self.senha = perfil[1]

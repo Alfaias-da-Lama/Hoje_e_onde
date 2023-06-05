@@ -1,6 +1,39 @@
 import menu
 import logincadas as lc
+import datetime as dt
 
+
+def getlistagenda():
+    with open('agenda.csv', 'r', encoding='utf-8') as arquivo:
+        conteudo = arquivo.readlines()
+        for linha in range(len(conteudo)):
+            conteudo[linha] =conteudo[linha].split(';')
+            for palavra in range(len(conteudo[linha])):
+               conteudo[linha][palavra] =conteudo[linha][palavra].strip()
+    conteudofiltrado = []
+    for index, linha in enumerate(conteudo):
+        if index == 0:
+            conteudofiltrado.append(linha)
+            print(linha[2].split('/'))
+        else:
+            try:
+                if (dt.datetime.now().year > int(linha[2].split('/')[2])): 
+                    pass
+                elif (dt.datetime.now().year == int(linha[2].split('/')[2])):
+                    if (dt.datetime.now().month > int(linha[2].split('/')[1])):
+                        pass
+                    elif (dt.datetime.now().month == int(linha[2].split('/')[1])):
+                        if (dt.datetime.now().day >= int(linha[2].split('/')[0])):
+                            pass
+                        else:
+                            conteudofiltrado.append(linha)
+                    else:
+                        conteudofiltrado.append(linha)
+                else:
+                    conteudofiltrado.append(linha)
+            except(IndexError):
+                continue
+    return(conteudofiltrado)
 
 def getlist(arq):
     with open(arq, 'r', encoding='utf-8') as arquivo:
@@ -10,7 +43,6 @@ def getlist(arq):
             for palavra in range(len(conteudo[linha])):
                conteudo[linha][palavra] =conteudo[linha][palavra].strip()
     return(conteudo)
-
 
 def mostrartabela(excluir=[0,1,2,7], content=[]):
     for index, linha in enumerate(content):
@@ -62,7 +94,7 @@ def mostrarbanda(contato=False):
 def mostrarlocal(contato = False):
     excluir = [0,1,2]
     if not contato:
-        excluir.append(7)
+        excluir.append(6)
     locais = getlist('perfilXlocais.csv')
     mostrartabela(content=locais)
     resposta = menu.menu(['procurar por nome', 'procurar por bairro', 'procurar por estilo musical'])
@@ -78,7 +110,7 @@ def mostrarlocal(contato = False):
 
 
 def mostraragenda():
-    agenda = getlist('agenda.csv')
+    agenda = getlistagenda()
     mostrartabela(content=agenda)
     resposta = menu.menu(['procurar por bairro', 'procurar por local', 'procurar por banda'])
     if resposta == 1:

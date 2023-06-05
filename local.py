@@ -18,6 +18,7 @@ def iniciar_menu_perfil(nome_local='perfilXlocais.csv'): #pegar o nome do local 
 
 
 def menu_perfil(): #página inicial do local (alterar depois)
+    import menu
     try:
         clear()
         print('BEM VINDO')
