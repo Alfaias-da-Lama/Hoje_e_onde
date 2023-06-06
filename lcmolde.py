@@ -1,3 +1,5 @@
+import datetime as dt
+
 class Banda:
     def __init__(self, perfil):
         self.usuario = perfil[0]
@@ -23,3 +25,8 @@ class Publico:
     def __init__(self, perfil):
         self.usuario = perfil[0]
         self.senha = perfil[1]
+        self.show = []
+        self.mensagem = 'voce atualmente não segue shows'
+    def seguindo(self, show):
+        self.show.append(show)
+#criar classe específica para show parece uma boa ideia

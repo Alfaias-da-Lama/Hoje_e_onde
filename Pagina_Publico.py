@@ -68,6 +68,30 @@ def alterarpublico(arq, usuario):
         print( '\33[31mCancelando operação... \33[m')
 
 
+def seguirshow(arqagenda):
+    bd.mostraragenda()
+    escolha = input('qual show voce deseja seguir: index')
+
+
+def showsseguindo(usuario):
+    for show in usuario.show:
+        conteudo = show.split(';')
+        data = conteudo[2].split('/')
+        dia = data[0]
+        mes = data[1]
+        ano = data[2]
+        datapadrao = datetime.date(ano, mes, dia)
+        hoje = datetime.date.today()
+        if datapadrao > hoje:
+            delta = datapadrao - hoje
+        elif datapadrao <= hoje:
+            delta = hoje - datapadrao
+        conteudo.append(delta.days)
+        for palavra in conteudo:
+            print(f'{palavra}'.ljust(12), end=' ')
+        print()
+    
+
 def pagina_publico(usuario):
     while True:
         escolha = menu.menu2(titulo="Página Público", componentes=["Ver Bandas", "Ver Locais", "Ver Agenda", "Editar Perfil", "Sair"])
