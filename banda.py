@@ -1,6 +1,55 @@
 import menu
 import logincadas as lc
+import datetime as dt
+import lcmolde as molde
+def mostrar_feedback(destinatario):
+    mostrar = False
+    shows = getlist('agenda.csv')
+    valshows = getlistagenda()
+    for linha in shows:
+        if not(linha in valshows):
+            show = molde.show(linha)
+            if show.feedback and (show.banda == destinatario or show.local == destinatario):
+                for mensagem in show.mensagem.split('/'):
+                    print(f"{show.local}, {show.data} --> {mensagem}")
+                    mostrar = True
+            else:
+                continue
+        else:
+            continue
+    if not mostrar:
+        print("Sem feedbacks para shows realizados ainda")
 
+def getlistagenda():
+    with open('agenda.csv', 'r', encoding='utf-8') as arquivo:
+        conteudo = arquivo.readlines()
+        for linha in range(len(conteudo)):
+            conteudo[linha] =conteudo[linha].split(';')
+            for palavra in range(len(conteudo[linha])):
+               conteudo[linha][palavra] =conteudo[linha][palavra].strip()
+    conteudofiltrado = []
+    for index, linha in enumerate(conteudo):
+        if index == 0:
+            conteudofiltrado.append(linha)
+        else:
+            try:
+                if (dt.datetime.now().year > int(linha[2].split('/')[2])): 
+                    pass
+                elif (dt.datetime.now().year == int(linha[2].split('/')[2])):
+                    if (dt.datetime.now().month > int(linha[2].split('/')[1])):
+                        pass
+                    elif (dt.datetime.now().month == int(linha[2].split('/')[1])):
+                        if (dt.datetime.now().day > int(linha[2].split('/')[0])):
+                            pass
+                        else:
+                            conteudofiltrado.append(linha)
+                    else:
+                        conteudofiltrado.append(linha)
+                else:
+                    conteudofiltrado.append(linha)
+            except(IndexError):
+                continue
+    return(conteudofiltrado)
 
 def getlist(arq):
     with open(arq, 'r', encoding='utf-8') as arquivo:
@@ -11,9 +60,12 @@ def getlist(arq):
                conteudo[linha][palavra] =conteudo[linha][palavra].strip()
     return(conteudo)
 
-
 def mostrartabela(excluir=[0,1,2,7], content=[]):
     for index, linha in enumerate(content):
+        if index > 0:
+            print(f'{index}'.ljust(5), end=' ')
+        else:
+            print('index', end =' ')
         for palindex, palavra in enumerate(linha):
             if not palindex in excluir:
                 if palavra == 'NaN':
@@ -23,7 +75,6 @@ def mostrartabela(excluir=[0,1,2,7], content=[]):
             else:
                 continue
         print()
-
 
 def mostrartabelafiltro(excluir=[0,1,2,7], content=[], filtro=[]):
     for index, linha in enumerate(content):
@@ -62,7 +113,7 @@ def mostrarbanda(contato=False):
 def mostrarlocal(contato = False):
     excluir = [0,1,2]
     if not contato:
-        excluir.append(7)
+        excluir.append(6)
     locais = getlist('perfilXlocais.csv')
     mostrartabela(content=locais)
     resposta = menu.menu(['procurar por nome', 'procurar por bairro', 'procurar por estilo musical'])
@@ -78,8 +129,8 @@ def mostrarlocal(contato = False):
 
 
 def mostraragenda():
-    agenda = getlist('agenda.csv')
-    mostrartabela(content=agenda)
+    agenda = getlistagenda()
+    mostrartabela(content=agenda, excluir = [])
     resposta = menu.menu(['procurar por bairro', 'procurar por local', 'procurar por banda'])
     if resposta == 1:
         filtro = input('por qual bairro voce deseja buscar? ')
@@ -280,7 +331,7 @@ def alterarartist(arq, usuario):
 
 def pagina_de_banda(usuario):
     while True:
-        resposta = menu.menu2('Página de Banda', ['Ver outras bandas','Ver locais', 'Ver agenda', 'Alterar perfil', 'Sair'])
+        resposta = menu.menu2('Página de Banda', ['Ver outras bandas','Ver locais', 'Ver agenda', 'Alterar perfil', "Ver feedbacks", 'Sair'])
         if resposta == 1:
             mostrarbanda()
         elif resposta == 2:
@@ -293,4 +344,6 @@ def pagina_de_banda(usuario):
             else:
                 alterarbanda(arq='perfilXbandas.csv', usuario=usuario)
         elif resposta == 5:
+            mostrar_feedback(usuario.usuario)
+        elif resposta == 6:
             break

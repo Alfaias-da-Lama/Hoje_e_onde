@@ -5,8 +5,12 @@ import sem_login
 import banda as bd
 import local as lo
 import time
+import Pagina_Publico as pb
+
+
 arqbanda=lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
 arqlocal=lc.criararquivo(nome='perfilXlocais.csv', cabeçalho='usuario;senha;tipo;nome;endereço;tipomusical;contato')
+arqpublico = lc.criararquivo(nome='perfilXpublico.csv', cabeçalho='usuario;senha')
 arqagenda=lc.criararquivo(nome='agenda.csv', cabeçalho='banda;local;data;horastart;horaend')
 os.system('cls')
 while True:
@@ -19,7 +23,7 @@ while True:
         break
 if resposta == 1:
     while True:
-        resposta2 = lc.login(arqbanda, arqlocal)
+        resposta2 = lc.login(arqbanda, arqlocal, arqpublico)
         if resposta2[0] == 1:
             continue
         elif resposta2[0] == 2:
@@ -29,10 +33,12 @@ if resposta == 1:
         else:
             break
 elif resposta == 2 or resposta2[0] == 1:
-    resposta2=lc.cadastro(arqbanda, arqlocal)
+    resposta2=lc.cadastro(arqbanda, arqlocal, arqpublico)
 elif resposta == 3 or resposta2[0] == 2:
    sem_login.opcoes_sem_login(resposta)
 if resposta2[0] == 'banda':
     bd.pagina_de_banda(usuario=resposta2[1])
 elif resposta2[0] == 'local':
-    lo.menu_principal()
+    lo.menu_principal(usuario=resposta2[1])
+elif resposta2[0] == 'publico':
+    pb.pagina_publico(usuario= resposta2[1])
