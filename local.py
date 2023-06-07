@@ -1,7 +1,9 @@
 import os 
 import time
-import sys
 import datetime
+import menu
+import banda as bd
+
 
 def clear():
     return os.system("cls")
@@ -12,17 +14,15 @@ def loading():
     print("Carregando...")
     time.sleep(1.5)
 
-  
-nome = 'Teste' #nome do local (alterar depois) 
 
-
-def iniciar_menu_perfil(nome_local): #pegar o nome do local no código de login
+def iniciar_menu_perfil(nome_local='perfilXlocais.csv'): #pegar o nome do local no código de login
     global nome
     nome = nome_local
     return menu_perfil()
 
 
 def menu_perfil(): #página inicial do local (alterar depois)
+    import menu
     try:
         clear()
         print('BEM VINDO')
@@ -56,16 +56,11 @@ def menu_perfil(): #página inicial do local (alterar depois)
         return menu_perfil()
 
 
-def menu_principal(): #página principal do local (alterar depois)
+def menu_principal(usuario): #página principal do local (alterar depois)
     try:
         clear()
-        print('[1]: Menu Perfil')
-        print('[2]: Ver Locais')
-        print('[3]: Ver Bandas')
-        print('[4]: Menu Agenda')
-        print('[5]: Sair')
 
-        decisao = int(input('Digite o que deseja fazer: '))
+        decisao = menu.menu2(titulo='Página de Locais', componentes=['Alterar Perfil', 'Ver Locais', 'Ver Bandas', "Ver Agenda"])
 
         if decisao == 1:
             loading()
@@ -80,9 +75,12 @@ def menu_principal(): #página principal do local (alterar depois)
             loading()
             return menu_agenda()
         elif decisao == 5:
+            loading()
+            return bd.mostrar_feedback(usuario.usuario)
+        elif decisao == 6:
             time.sleep(0.43)
             print('Fim do Programa!')
-            sys.exit()
+            exit()
         else:
             print('Opção inválida!')
             time.sleep(1.5)
@@ -201,7 +199,7 @@ def editar_perfil():
         clear()
         encontrado = False
         with open('local.csv', 'r', encoding='utf8') as f, open('local_temp.csv', 'w', encoding='utf8') as f_temp:
-            linhas = f.readlines()
+            linhas = f_temp.readlines()
 
             for linha in linhas:
                 dados = linha.strip().split(';')
@@ -336,6 +334,7 @@ def ver_agenda():
         time.sleep(1.5)
         return menu_agenda() #voltar para o menu
 
+
 def adicionar_agenda(): #adicionar um show na agenda
     try:
         global nome
@@ -463,4 +462,3 @@ def editar_agenda():
         time.sleep(1.5)
         return menu_agenda() #voltar para o menu
     
-menu_principal()
