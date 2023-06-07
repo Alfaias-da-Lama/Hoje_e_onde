@@ -5,7 +5,7 @@ import sem_login
 import banda as bd
 import local as lo
 import time
-import publico as pb
+import Pagina_Publico as pb
 
 
 arqbanda=lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
@@ -23,7 +23,7 @@ while True:
         break
 if resposta == 1:
     while True:
-        resposta2 = lc.login(arqbanda, arqlocal)
+        resposta2 = lc.login(arqbanda, arqlocal, arqpublico)
         if resposta2[0] == 1:
             continue
         elif resposta2[0] == 2:
@@ -33,7 +33,7 @@ if resposta == 1:
         else:
             break
 elif resposta == 2 or resposta2[0] == 1:
-    resposta2=lc.cadastro(arqbanda, arqlocal)
+    resposta2=lc.cadastro(arqbanda, arqlocal, arqpublico)
 elif resposta == 3 or resposta2[0] == 2:
    sem_login.opcoes_sem_login(resposta)
 if resposta2[0] == 'banda':

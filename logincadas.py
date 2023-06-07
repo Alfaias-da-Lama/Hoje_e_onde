@@ -209,6 +209,7 @@ def login(arqbanda, arqlocal):
     from getpass import getpass
     banda = False
     temperfil = False
+    local = False
     user = input('insira seu usuário: ')
     password = getpass(prompt='insira sua senha: ')
     with open(arqbanda, 'r', newline='', encoding='utf-8') as arquivo:
@@ -237,9 +238,24 @@ def login(arqbanda, arqlocal):
                     break
                 else:
                     continue
+    if not banda and not local:
+        with open(arqpublico, 'r', newline='', encoding='utf-8') as arquivo:
+            perfis = arquivo.readlines()
+            for perfil in perfis:
+                perfil = perfil.split(';')
+                if perfil[0] == user and perfil[1] == password:
+                    local = True
+                    print('perfil encontrado')
+                    temperfil = True
+                    usuario = lc.Publico(perfil=perfil)
+                    return(["local", usuario])
+                    break
+                else:
+                    continue
             if not temperfil:
                 print('''\33[31mPerfil não encontrado!\33[m''')
                 reposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
+                local = True
                 return([reposta2])
             else:
                 print('usuário encontrado')

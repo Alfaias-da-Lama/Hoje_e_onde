@@ -14,7 +14,6 @@ def getlistagenda():
     for index, linha in enumerate(conteudo):
         if index == 0:
             conteudofiltrado.append(linha)
-            print(linha[2].split('/'))
         else:
             try:
                 if (dt.datetime.now().year > int(linha[2].split('/')[2])): 
@@ -23,7 +22,7 @@ def getlistagenda():
                     if (dt.datetime.now().month > int(linha[2].split('/')[1])):
                         pass
                     elif (dt.datetime.now().month == int(linha[2].split('/')[1])):
-                        if (dt.datetime.now().day >= int(linha[2].split('/')[0])):
+                        if (dt.datetime.now().day > int(linha[2].split('/')[0])):
                             pass
                         else:
                             conteudofiltrado.append(linha)
@@ -46,6 +45,10 @@ def getlist(arq):
 
 def mostrartabela(excluir=[0,1,2,7], content=[]):
     for index, linha in enumerate(content):
+        if index > 0:
+            print(f'{index}'.ljust(5), end=' ')
+        else:
+            print('index', end =' ')
         for palindex, palavra in enumerate(linha):
             if not palindex in excluir:
                 if palavra == 'NaN':
@@ -55,7 +58,6 @@ def mostrartabela(excluir=[0,1,2,7], content=[]):
             else:
                 continue
         print()
-
 
 def mostrartabelafiltro(excluir=[0,1,2,7], content=[], filtro=[]):
     for index, linha in enumerate(content):
@@ -111,7 +113,7 @@ def mostrarlocal(contato = False):
 
 def mostraragenda():
     agenda = getlistagenda()
-    mostrartabela(content=agenda)
+    mostrartabela(content=agenda, excluir = [])
     resposta = menu.menu(['procurar por bairro', 'procurar por local', 'procurar por banda'])
     if resposta == 1:
         filtro = input('por qual bairro voce deseja buscar? ')

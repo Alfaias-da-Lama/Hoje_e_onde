@@ -1,6 +1,6 @@
 import banda as bd
 import menu
-
+import lcmolde as lc
 
 def alterarpublico(arq, usuario):
     prosseguir = True
@@ -68,33 +68,40 @@ def alterarpublico(arq, usuario):
         print( '\33[31mCancelando operação... \33[m')
 
 
-def seguirshow(arqagenda):
-    bd.mostraragenda()
-    escolha = input('qual show voce deseja seguir: index')
+def seguirshow(arqusuario, usuario):  #criar um filtro para o programa criar os objetos dos shows baseados no filtro, salvar o filtro
+    memoria_show = bd.getlistagenda()
+    bd.mostrartabela(excluir=[], content=memoria_show)
+    escolha = int(input('qual show voce deseja seguir: '))
+    show = lc.show(memoria_show[escolha])
+    usuario.show.append(show)
 
-
-def showsseguindo(usuario):
-    for show in usuario.show:
-        conteudo = show.split(';')
-        data = conteudo[2].split('/')
-        dia = data[0]
-        mes = data[1]
-        ano = data[2]
-        datapadrao = datetime.date(ano, mes, dia)
-        hoje = datetime.date.today()
-        if datapadrao > hoje:
-            delta = datapadrao - hoje
-        elif datapadrao <= hoje:
-            delta = hoje - datapadrao
-        conteudo.append(delta.days)
-        for palavra in conteudo:
-            print(f'{palavra}'.ljust(12), end=' ')
-        print()
     
+
+def mostrarshows(usuario):
+    if usuario.show != []:
+        print('shows seguidos:')
+        for show in usuario.show:
+            print(f'{show.banda<12} {show.local<12} {show.horastart<12} {show.horaend<12}, faltam {show.temporest} dias para o show começar')
+    else:
+        usuario.mensagem
+
+
+def dar_feedback(usuario):
+    cont = 0
+    valshow = bd.getlistagenda()
+    for show in usuario.show:
+        if [show.banda, show.local, show.horastart, show.horaend] in valshow:
+            cont+=1
+            print(f'{cont} = {show.banda} - {show.local} - {show.data}')
+    escolha = int(input("qual show voce deseja dar feedback: "))
+    usuario.show[escolha].feedback(usuario)
+    usuario.show[escolha].salvar_dados()
+
 
 def pagina_publico(usuario):
     while True:
-        escolha = menu.menu2(titulo="Página Público", componentes=["Ver Bandas", "Ver Locais", "Ver Agenda", "Editar Perfil", "Sair"])
+        mostrarshows(usuario)
+        escolha = menu.menu2(titulo="Página Público", componentes=["Ver Bandas", "Ver Locais", "Ver Agenda", "Editar Perfil", "Seguir show", "Dar Feedback de shows assistidos", "Sair"])
         if escolha == 1:
             bd.mostrarbanda()
         elif escolha == 2:
@@ -103,5 +110,9 @@ def pagina_publico(usuario):
             bd.mostraragenda()
         elif escolha == 4:
             alterarpublico(arq='perfilXpublico.csv', usuario=usuario.usuario)
+        elif escolha == 5:
+            seguirshow(arqusuario='perfilXpublico.csv', usuario=usuario)
+        elif escolha == 6:
+            dar_feedback(usuario)
         elif escolha == 5:
             break
