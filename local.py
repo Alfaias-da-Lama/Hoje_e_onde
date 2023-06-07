@@ -356,11 +356,16 @@ def adicionar_agenda(): #adicionar um show na agenda
 
         with open('agenda.csv', 'a', encoding='utf8') as f:
             banda = input('Digite o nome da banda: ')
-            data = input('Digite a data (dia/mês/ano): ')
-            if data == '':
-                print('A data não pode ser vazia!')
-                time.sleep(1.5)
-                return adicionar_agenda()
+
+            while True:
+                data = input('Digite a data do show (dd/mm/aaaa): ')
+                try:
+                    datetime.datetime.strptime(data, '%d/%m/%Y')
+                    break
+                except ValueError:
+                    print('Data inválida! Digite uma data válida no formato dd/mm/aaaa.')
+                    time.sleep(1.5)
+                    clear()
             hora_i = input('Digite o horário de início: ')
             hora_f = input('Digite o horário de encerramento: ')
 
