@@ -39,6 +39,6 @@ elif resposta == 3 or resposta2[0] == 2:
 if resposta2[0] == 'banda':
     bd.pagina_de_banda(usuario=resposta2[1])
 elif resposta2[0] == 'local':
-    lo.menu_principal()
+    lo.menu_principal(usuario=resposta2[1])
 elif resposta2[0] == 'publico':
     pb.pagina_publico(usuario= resposta2[1])

@@ -114,5 +114,5 @@ def pagina_publico(usuario):
             seguirshow(arqusuario='perfilXpublico.csv', usuario=usuario)
         elif escolha == 6:
             dar_feedback(usuario)
-        elif escolha == 5:
+        elif escolha == 7:
             break

@@ -1,7 +1,24 @@
 import menu
 import logincadas as lc
 import datetime as dt
-
+import lcmolde as molde
+def mostrar_feedback(destinatario):
+    mostrar = False
+    shows = getlist('agenda.csv')
+    valshows = getlistagenda()
+    for linha in shows:
+        if not(linha in valshows):
+            show = molde.show(linha)
+            if show.feedback and (show.banda == destinatario or show.local == destinatario):
+                for mensagem in show.mensagem.split('/'):
+                    print(f"{show.local}, {show.data} --> {mensagem}")
+                    mostrar = True
+            else:
+                continue
+        else:
+            continue
+    if not mostrar:
+        print("Sem feedbacks para shows realizados ainda")
 
 def getlistagenda():
     with open('agenda.csv', 'r', encoding='utf-8') as arquivo:
@@ -314,7 +331,7 @@ def alterarartist(arq, usuario):
 
 def pagina_de_banda(usuario):
     while True:
-        resposta = menu.menu2('Página de Banda', ['Ver outras bandas','Ver locais', 'Ver agenda', 'Alterar perfil', 'Sair'])
+        resposta = menu.menu2('Página de Banda', ['Ver outras bandas','Ver locais', 'Ver agenda', 'Alterar perfil', "Ver feedbacks", 'Sair'])
         if resposta == 1:
             mostrarbanda()
         elif resposta == 2:
@@ -327,4 +344,6 @@ def pagina_de_banda(usuario):
             else:
                 alterarbanda(arq='perfilXbandas.csv', usuario=usuario)
         elif resposta == 5:
+            mostrar_feedback(usuario.usuario)
+        elif resposta == 6:
             break
