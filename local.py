@@ -356,7 +356,11 @@ def adicionar_agenda(): #adicionar um show na agenda
 
         with open('agenda.csv', 'a', encoding='utf8') as f:
             banda = input('Digite o nome da banda: ')
-            data = input('Digite a data: ')
+            data = input('Digite a data (dia/mês/ano): ')
+            if data == '':
+                print('A data não pode ser vazia!')
+                time.sleep(1.5)
+                return adicionar_agenda()
             hora_i = input('Digite o horário de início: ')
             hora_f = input('Digite o horário de encerramento: ')
 
@@ -404,7 +408,9 @@ def editar_agenda():
                             linha = f'{dados[0]};{dados[1]};{novo_local};{dados[3]};{dados[4]};{dados[5]};'
                         
                         elif decisao == 'data':
-                            nova_data = input('Digite a nova data (ou deixe em branco para apagar): ')
+                            nova_data = input('Digite a nova data: ')
+                            if nova_data == '':
+                                nova_data = dados[3]
                             linha = f'{dados[0]};{dados[1]};{dados[2]};{nova_data};{dados[4]};{dados[5]};'
                         
                         elif decisao == 'hora início':
