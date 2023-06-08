@@ -75,7 +75,6 @@ def seguirshow(arqusuario, usuario):  #criar um filtro para o programa criar os 
     show = lc.show(memoria_show[escolha])
     usuario.show.append(show)
 
-    
 
 def mostrarshows(usuario):
     if usuario.show != []:

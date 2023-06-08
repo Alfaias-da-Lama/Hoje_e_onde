@@ -2,7 +2,7 @@ import lcmolde as lc
 import menu
 from validate_email import validate_email
 from getpass import getpass
-
+import win32com.client as w3
 
 def enviaremail(destinatario,usuario,senha):
     """(N\A) envia um email ao usuario para recuperação de senha
@@ -10,20 +10,23 @@ def enviaremail(destinatario,usuario,senha):
             destinatario (str): o email para qual vai ser enviada a mensagem
             usuario (str): o nome de usuario da pessoa que quer recuperar a senha
             senha (str): a senha do usuario que vai sern enviada a ele"""
-    import win32com.client as w3
-    integracao = w3.Dispatch('outlook.application') 
-    email = integracao.CreateItem(0) 
-    email.To = f'{destinatario}' 
-    email.Subject = 'Recuperacao de senha' 
-    email.HTMLBody = f"""
-    <p> Ola usuario {usuario}</p>
-    <p>voce solicitou uma recuperação de senha em nosso app Hoje é onde</p>
-    <p>sua senha é: {senha}</p>
-    <p>se ainda assim a sua senha não funcionar responda esse e-mail com o assunto: </p>
-    <p>ERRO DE SENHA </p>
-    <p> que alguem da equipe o atenderá</p>
-    <p> atensiosamente: Alfaias da Lama</p>""" 
-    email.Send() 
+    try:
+        integracao = w3.Dispatch('outlook.application') 
+        email = integracao.CreateItem(0) 
+        email.To = f'{destinatario}' 
+        email.Subject = 'Recuperacao de senha' 
+        email.HTMLBody = f"""
+        <p> Ola usuario {usuario}</p>
+        <p>voce solicitou uma recuperação de senha em nosso app Hoje é onde</p>
+        <p>sua senha é: {senha}</p>
+        <p>se ainda assim a sua senha não funcionar responda esse e-mail com o assunto: </p>
+        <p>ERRO DE SENHA </p>
+        <p> que alguem da equipe o atenderá</p>
+        <p> atensiosamente: Alfaias da Lama</p>""" 
+        email.Send() 
+    except:
+        print('\33[31mErro ao enviar email, tente novamente mais tarde\33[m')
+
 
 def validaruser(usuario, arqlocal, arqbanda, arqpublico):
     """verifica se o usuario ja existe nos arquivos que se recebe como parametro
@@ -42,14 +45,17 @@ def validaruser(usuario, arqlocal, arqbanda, arqpublico):
     memoria = [] 
 
     #preenchimento da variavel memoria
-    for arquivo in listaarq:
-        with open(arquivo, 'r', encoding='utf-8') as arquivo:
-            arqsep = arquivo.readlines() 
-        cont = 0
-        for a in arqsep:
-            if cont >0: 
-                memoria.append(a.split(';')[0]) 
-                cont+=1
+    try:
+        for arquivo in listaarq:
+            with open(arquivo, 'r', encoding='utf-8') as arquivo:
+                arqsep = arquivo.readlines() 
+            cont = 0
+            for a in arqsep:
+                if cont >0: 
+                    memoria.append(a.split(';')[0]) 
+                    cont+=1
+    except(FileNotFoundError):
+        print("\33[31mArquivo não encontrado, reinicie o programa\33[m")
     
     #verificação do nome de usuario
     for a in memoria:
@@ -58,6 +64,7 @@ def validaruser(usuario, arqlocal, arqbanda, arqpublico):
         else:
             continue
     return(validacao)
+
 
 def validar_email(email):
     """verifica se o que foi digitado foi um email, tambem se ele teve atividade recente
@@ -68,6 +75,7 @@ def validar_email(email):
             valido (bool): devolve verdadeiro ou falso para se o email é verdadeiro ou falso"""
     valido= validate_email(f'{email}', verify=True) 
     return(valido)
+
 
 def conferirarquivo(nome):
     """Verifica se o arquivo escolhido existe ou não
@@ -108,7 +116,12 @@ def criararquivo(nome, cabeçalho):
 
 
 def cadastro_artista(usuario, senha):
-    grupo = input('voce é artista [solo] ou tem [banda]? ')
+    while True:
+        grupo = input('voce é artista [solo] ou tem [banda]? ')
+    if grupo != 'banda' and grupo != 'solo':
+        print('escolha uma opção válida')
+    else:
+        break
     if grupo == 'banda':
         nomebanda = input('qual o nome da sua banda: ')
         solo = False
@@ -129,7 +142,11 @@ def cadastro_artista(usuario, senha):
         qtdinte = int(input('quantos integrantes tem a sua banda: '))
         integrantes = []
         for integrante in range(qtdinte):
-            integrantes.append(input(f'digite o nome do integrante {integrante+1}: '))
+            integrante = input(f'digite o nome do integrante {integrante+1}: ')
+            if '/' in integrante:
+                print("por favor não use o caracter (/) no preenchimento")
+            else:
+                integrantes.append()
         integrantes = '/'.join(integrantes)
     ctt = []
     while True:
@@ -137,11 +154,15 @@ def cadastro_artista(usuario, senha):
         if contato == '0':
             break
         else:
+            if '/' in contato:
+                print('por favor não use caracter (/) no preenchimento')
             ctt.append(contato)
     ctt = '/'.join(ctt)
     try:
         with open(arqbanda,'a', newline='', encoding='utf-8') as arquivo:
             arquivo.write(f'{usuario};{senha};{tipo};{nomebanda};{integrantes};{bairro};{estilo};{ctt}\n')
+    except(FileNotFoundError):
+        print('\33[31mArquivo não encontrado, reinicie o programa\33[31m')
     except:
         print('\33[31mErro ao cadastrar, tente novamente\33[m')
     else:
@@ -161,11 +182,16 @@ def cadastro_local(usuario, senha):
         if contato == '0':
             break
         else:
-            ctt.append(contato)
+            if '/' in contato:
+                print('por favor não use caracter (/) no preenchimento')
+            else:
+                ctt.append(contato)
     ctt = '/'.join(ctt)
     try:
         with open(arqlocal,'a', newline='', encoding='utf-8') as arquivo:
             arquivo.write(f'{usuario};{senha};{tipo};{nomelocal};{endereço};{estilo};{ctt}\n')
+    except(FileNotFoundError):
+        print('\33[31mArquivo não encontrado, reinicie o programa\33[31m')
     except:
         print('\33[31mErro ao cadastrar, tente novamente\33[m')
     else:
@@ -178,12 +204,29 @@ def cadastro_publico(usuario, senha):
     try:
         with open(arqpublico,'a', newline='', encoding='utf-8') as arquivo:
             arquivo.write(f'{usuario};{senha}\n')
+    except(FileNotFoundError):
+        print('\33[31mArquivo não encontrado, reinicie o programa\33[31m')
     except:
         print('\33[31mErro ao cadastrar, tente novamente\33[m')
     else:
         print('\33[33mCadastro realizado com sucesso!\33[m')
         user = lc.Local([usuario,senha,tipo,nomelocal,endereço,estilo,ctt])
         return('publico', user)
+
+
+def verificar_perfil(arq, user, password, temperfil):
+    with open(arq, 'r', newline='', encoding='utf-8') as arquivo:
+        perfis = arquivo.readlines()
+        for perfil in perfis:
+            perfil = perfil.split(';')
+            if perfil[0] == user and perfil[1] == password:
+                local = True
+                print('perfil encontrado')
+                temperfil = True
+                break
+            else:
+                temperfil = False
+        return([temperfil, perfil])
 
 
 def cadastro(arqbanda, arqlocal, arqpublico):
@@ -258,72 +301,63 @@ def cadastro(arqbanda, arqlocal, arqpublico):
 
         elif escolha == 'publico':
             return(cadastro_publico(usuario, senha))
+    except(KeyboardInterrupt):
+        print('\33[31mCadastro cancelado\33[m')
+        return(['sem cadastro'])
     except:
         print('\33[31mErro ao cadastrar\33[m')
         return(['sem cadastro'])
 
 
 def login(arqbanda, arqlocal, arqpublico):
-    while True:
-        temperfil = False
-        banda = False
-        local = False
-        publico = False
-        user = input('insira seu usuário: ')
-        password = getpass(prompt='insira sua senha: ')
-        with open(arqbanda, 'r', newline='', encoding='utf-8') as arquivo:
-            perfis = arquivo.readlines()
-            for perfil in perfis:
-                perfil = perfil.split(';')
-                if perfil[0] == user and perfil[1] == password:
-                    banda = True
-                    temperfil = True
-                    usuario = lc.Banda(perfil=perfil)
-                    return(["banda", usuario])
+    try:
+        while True:
+            temperfil = False
+            banda = False
+            local = False
+            user = input('insira seu usuário: ')
+            password = getpass(prompt='insira sua senha: ')
+            temperfil = verificar_perfil(arq=arqbanda, user=user, password=password, temperfil=temperfil)
+            if temperfil[0]:
+                usuario = lc.Banda(perfil=temperfil[1])
+                banda = True
+                return(["banda", usuario])
+                break
+            else:
+                continue
+            if not banda:
+                temperfil = verificar_perfil(arq=arqlocal, user=user, password=password, temperfil=temperfil)
+                if temperfil[0]:
+                    usuario = lc.Local(perfil=temperfil[1])
+                    local = True
+                    return(["local", usuario])
                     break
                 else:
                     continue
-        if not banda:
-            with open(arqlocal, 'r', newline='', encoding='utf-8') as arquivo:
-                perfis = arquivo.readlines()
-                for perfil in perfis:
-                    perfil = perfil.split(';')
-                    if perfil[0] == user and perfil[1] == password:
-                        local = True
-                        print('perfil encontrado')
-                        temperfil = True
-                        usuario = lc.Local(perfil=perfil)
-                        return(["local", usuario])
-                        break
-                    else:
-                        continue
 
-        if not banda and not local:
-            with open(arqpublico, 'r', newline='', encoding='utf-8') as arquivo:
-                perfis = arquivo.readlines()
-                for perfil in perfis:
-                    perfil = perfil.split(';')
-                    if perfil[0] == user and perfil[1] == password:
-                        local = True
-                        print('perfil encontrado')
-                        temperfil = True
-                        usuario = lc.Publico(perfil=perfil)
-                        return(["local", usuario])
-                        break
-                    else:
-                        continue
+            if not banda and not local:
+                temperfil = verificar_perfil(arq=arqpublico, user=user, password=password, temperfil=temperfil)
+                if temperfil[0]:
+                    usuario = lc.Publico(perfil=perfil)
+                    return(["Publico", usuario])
+                    break
+                else:
+                    continue
 
-                if not temperfil:
-                    print('''\33[31mPerfil não encontrado!\33[m''')
-                    reposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
-                    if resposta2 == 1:
-                        continue
-                    elif reposta2 == 2:
-                        cadastro(arqbanda, arqlocal, arqpublico)
-                    elif resposta2 == 3:
-                        return(['sem cadastro'])
-                        break   
+            if not temperfil:
+                print('''\33[31mPerfil não encontrado!\33[m''')
+                reposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
+                if resposta2 == 1:
+                    continue
+                elif reposta2 == 2:
+                    cadastro(arqbanda, arqlocal, arqpublico)
+                elif resposta2 == 3:
+                    return(['sem cadastro'])
+                    break   
                 else:
                     print('usuário encontrado')
                     break
-
+    except(KeyboardInterrupt):
+        print("\33[31mCadastro cancelado\33[m")
+    except:
+        print("\33[31mErro no cadastro\33[m")
