@@ -21,7 +21,7 @@ def iniciar_menu_perfil(nome_local='perfilXlocais.csv'): #pegar o nome do local 
     return menu_perfil()
 
 
-def menu_perfil(): #página inicial do local (alterar depois)
+def menu_perfil(): #página inicial do perfil do local 
     import menu
     try:
         clear()
@@ -56,7 +56,7 @@ def menu_perfil(): #página inicial do local (alterar depois)
         return menu_perfil()
 
 
-def menu_principal(usuario): #página principal do local (alterar depois)
+def menu_principal(usuario): #página principal do local 
     try:
         clear()
 
@@ -92,7 +92,7 @@ def menu_principal(usuario): #página principal do local (alterar depois)
         return menu_principal()
 
 
-def menu_agenda(): #menu das funções da agenda (alterar depois)
+def menu_agenda(): #menu das funções da agenda
     try:
         clear()
         print('[1]: Criar Show na Agenda')
@@ -125,7 +125,7 @@ def menu_agenda(): #menu das funções da agenda (alterar depois)
         return menu_agenda()
 
 
-def ver_perfil():
+def ver_perfil(): #visualização do próprio perfil
     try:
         global nome
         clear()
@@ -193,7 +193,7 @@ def adicionar_informacoes(): #adicionar informações do próprio perfil
         time.sleep(1.5)
         return menu_perfil() #voltar para o menu
 
-def editar_perfil():
+def editar_perfil(): #editar informações do próprio perfil
     try:
         global nome
         clear()
@@ -313,7 +313,7 @@ def ver_bandas(): #ver todas as bandas
         return menu_principal() #voltar para o menu
     
 
-def ver_agenda():
+def ver_agenda(): #ver a agenda de shows
     try:
         clear()
         with open('agenda.csv', 'r', encoding='utf8') as f:
@@ -379,7 +379,7 @@ def adicionar_agenda(): #adicionar um show na agenda
         return menu_agenda() #voltar para o menu
 
 
-def editar_agenda():
+def editar_agenda(): #editar as informações de um show específico na agenda
     try:
         global nome
         clear()
