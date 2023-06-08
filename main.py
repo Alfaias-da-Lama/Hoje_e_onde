@@ -15,30 +15,22 @@ arqagenda=lc.criararquivo(nome='agenda.csv', cabeçalho='banda;local;data;horast
 os.system('cls')
 while True:
     resposta = menu.menu2('Tela de cadastro', ['Login', 'Cadastro', 'Prosseguir sem logar'])
-    resposta2 = 0
     if resposta > 3:
         os.system('cls')
         print('\33[31mInsira uma resposta válida!\33[m')
     else:
         break
 if resposta == 1:
-    while True:
-        resposta2 = lc.login(arqbanda, arqlocal, arqpublico)
-        if resposta2[0] == 1:
-            continue
-        elif resposta2[0] == 2:
-            break
-        elif resposta2[0] == 3:
-            break
-        else:
-            break
-elif resposta == 2 or resposta2[0] == 1:
-    resposta2=lc.cadastro(arqbanda, arqlocal, arqpublico)
-elif resposta == 3 or resposta2[0] == 2:
+    usuario = lc.login(arqbanda, arqlocal, arqpublico)
+elif resposta == 2:
+    usuario = lc.cadastro(arqbanda, arqlocal, arqpublico)
+elif resposta == 3 or usuario[0] == 'sem cadastro':
    sem_login.opcoes_sem_login(resposta)
-if resposta2[0] == 'banda':
-    bd.pagina_de_banda(usuario=resposta2[1])
-elif resposta2[0] == 'local':
-    lo.menu_principal(usuario=resposta2[1])
-elif resposta2[0] == 'publico':
-    pb.pagina_publico(usuario= resposta2[1])
+
+
+if usuario[0] == 'banda':
+    bd.pagina_de_banda(usuario=usuario[1])
+elif usuario[0] == 'local':
+    lo.menu_principal(usuario=usuario[1])
+elif usuario[0] == 'publico':
+    pb.pagina_publico(usuario= usuario[1])
