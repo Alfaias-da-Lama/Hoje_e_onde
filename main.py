@@ -8,10 +8,10 @@ import time
 import Pagina_Publico as pb
 
 try:
-    arqbanda=lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
-    arqlocal=lc.criararquivo(nome='perfilXlocais.csv', cabeçalho='usuario;senha;tipo;nome;endereço;tipomusical;contato')
-    arqpublico = lc.criararquivo(nome='perfilXpublico.csv', cabeçalho='usuario;senha')
-    arqagenda=lc.criararquivo(nome='agenda.csv', cabeçalho='banda;local;data;horastart;horaend')
+    arqbanda = lc.criararquivo(nome='perfilXbandas.csv', cabeçalho='usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato')
+    arqlocal = lc.criararquivo(nome='perfilXlocais.csv', cabeçalho='usuario;senha;tipo;nome;endereço;tipomusical;contato')
+    arqpublico = lc.criararquivo(nome='perfilXpublico.csv', cabeçalho='usuario;senha;idx_show')
+    arqagenda = lc.criararquivo(nome='agenda.csv', cabeçalho='ordem;banda;local;data;horastart;horaend')
     os.system('cls')
     while True:
         resposta = menu.menu2('Tela de cadastro', ['Login', 'Cadastro', 'Prosseguir sem logar'])

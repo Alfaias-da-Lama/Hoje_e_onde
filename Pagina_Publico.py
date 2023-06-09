@@ -58,31 +58,41 @@ def alterarpublico(arq, usuario):
     print(memoria_csv[linha])
     escolha = input('Digite [ok] para confirmar ou [cancelar] para não registrar as mudanças: ')
     if prosseguir and escolha != 'cancelar':
-        with open(arq, 'w', encoding='utf-8') as arquivo:
-            arquivo.write('usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato\n')
-        with open(arq, 'a', encoding='utf-8') as arquivo:
-            for linha in range(1, len(memoria_csv)):
-                arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strp()}\n')
-        print('\33[31mCadastro atualizado!\33[m')
+        try:
+            with open(arq, 'w', encoding='utf-8') as arquivo:
+                arquivo.write('usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato\n')
+            with open(arq, 'a', encoding='utf-8') as arquivo:
+                for linha in range(1, len(memoria_csv)):
+                    arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strip()}\n')
+            print('\33[31mCadastro atualizado!\33[m')
+        except:
+            print("\33[31mErro ao atualizar cadastro, tente novamente\33[m")
     else:
         print( '\33[31mCancelando operação... \33[m')
 
 
-def seguirshow(arqusuario, usuario):  #criar um filtro para o programa criar os objetos dos shows baseados no filtro, salvar o filtro
+def seguirshow(arqusuario, usuario):  
     memoria_show = bd.getlistagenda()
     bd.mostrartabela(excluir=[], content=memoria_show)
-    escolha = int(input('qual show voce deseja seguir: '))
+    while True:
+        try:
+            escolha = int(input('qual show voce deseja seguir [index]: '))
+        except(ValueError):
+            print("\33[31mInsira um numero válido\33[m")
     show = lc.show(memoria_show[escolha])
     usuario.show.append(show)
 
 
 def mostrarshows(usuario):
-    if usuario.show != []:
-        print('shows seguidos:')
-        for show in usuario.show:
-            print(f'{show.banda<12} {show.local<12} {show.horastart<12} {show.horaend<12}, faltam {show.temporest} dias para o show começar')
-    else:
-        usuario.mensagem
+    try:
+        if usuario.show != []:
+            print('shows seguidos:')
+            for show in usuario.show:
+                print(f'{show.banda<12} {show.local<12} {show.horastart<12} {show.horaend<12}, faltam {show.temporest} dias para o show começar')
+        else:
+            print(usuario.mensagem)
+    except:
+        print("\33[31mErro ao mostrar shows seguidos\33[m")
 
 
 def dar_feedback(usuario):
@@ -92,9 +102,12 @@ def dar_feedback(usuario):
         if [show.banda, show.local, show.horastart, show.horaend] in valshow:
             cont+=1
             print(f'{cont} = {show.banda} - {show.local} - {show.data}')
-    escolha = int(input("qual show voce deseja dar feedback: "))
-    usuario.show[escolha].feedback(usuario)
-    usuario.show[escolha].salvar_dados()
+    try:
+        escolha = int(input("qual show voce deseja dar feedback: "))
+        usuario.show[escolha].feedback(usuario)
+        usuario.show[escolha].salvar_dados()
+    except:
+        print("\33[31mErro ao dar feedback\33[m")
 
 
 def pagina_publico(usuario):

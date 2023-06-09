@@ -26,8 +26,17 @@ class Publico:
     def __init__(self, perfil):
         self.usuario = perfil[0]
         self.senha = perfil[1]
+        self.idx_show = perfil[3].split("/")
         self.show = []
         self.mensagem = True
+
+    
+    def regatar_shows(self):
+        shows = bd.getlist('agenda.csv')
+        for numero in idx_show:
+            self.show.append(show(shows[numero]))
+
+
     def seguindo(self, show):
         """adiciona mais um show que o cadastrado como Público vai seguir
             Parameters:
@@ -40,22 +49,23 @@ class Publico:
         """função que pega as alterações feitas em relação a shows seguidos e feedbacks e salva
         no arquivo csv"""
         memoria_csv = bd.getlist('perfilXpublico.csv')
-        for publico in memoria_csv:
-            if publico[0] == self.usuario:
-                pulbico = [self.usuario, self.senha, self.show]
         with open('perfilXpublico.csv', 'w', encoding='utf-8') as file:
             for publico in memoria_csv:
+                if publico[0] == self.usuario and publico[1] == self.senha:
+                    idx = ("/").join(self.idx_show)
+                    pulbico = f"{self.usuario};{self.senha};{idx}"
                 file.write(publico)
 
 
 
 class show:
     def __init__(self,show):
-        self.banda = show[0]
-        self.local = show[1]
-        self.data = show[2]
-        self.horastart = show[3]
-        self.horaend = show[4]
+        self.idx = show[0]
+        self.banda = show[1]
+        self.local = show[2]
+        self.data = show[3]
+        self.horastart = show[4]
+        self.horaend = show[5]
         try:
             self.mensagem = show[5]
         except(IndexError):
@@ -81,11 +91,12 @@ class show:
         """cria uma mensagem de feedback no show, para ser salvo posteriormente
             Parameters:
                 usuario (object): o usuario que está criando a mensagem de feedback"""
+        nota = float(input(f"Dê uma nota de 0-5 sobre o show da {self.banda} no {self.local}: "))
         mensagem = input(f'Dê seu feedback sobre o show da {self.banda} no {self.local}: ')
         if self.feedback:
-            self.mensagem += f'/{usuario.usuario} - {mensagem}'
+            self.mensagem += f'/{usuario.usuario}- nota: {nota} - {mensagem}'
         else:
-            self.mensagem += f'{usuario.usuario} - {mensagem}'
+            self.mensagem += f'{usuario.usuario}- nota: {nota} - {mensagem}'
         self.feedback = True
     def salvar_dados(self):
         """salva as alterações em relação a shows seguidos no arquivo csv"""
@@ -95,7 +106,7 @@ class show:
                 if self.feedback:
                     show = [self.banda, self.local, self.data, self.horastart, self.horaend]
                 else:
-                    show = [self.banda, self.local, self.data, self.horastart, self.horaend, self.mensagem]
+                    show = f"{self.banda};{self.local};{self.data};{self.horastart};{self.horaend};{self.mensagem}"
         with open('agenda.csv', 'w', encoding='utf-8') as file:
             for show in memoria_csv:
                 file.write(show)
