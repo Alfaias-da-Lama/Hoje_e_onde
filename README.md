@@ -7,7 +7,12 @@
 # Índice
 * [Descrição](#descrição)
 * [Funcionalidades](#funcionalidades)
-* []
+* [Acesso ao projeto](#acesso-ao-projeto)
+* [Tecnologias](#tecnologias-utilizadas)
+* [Contribuidores](#contribuidores)
+* [Autores](#autores)
+* [Licença](#licença)
+* [Contato](#contato)
 
 ## Descrição:
 Protótipo da solução da cadeira de Projetos da faculdade Cesar, consiste em um aplicativo para ajudar bandas e grupos musicais a se conectarem a locais que realizam shows ao vivo com intuito de facilitar a programação de shows de pequeno porte no Recife.
@@ -41,3 +46,80 @@ Além disso, o Hoje é Onde oferece recursos para usuários que estão em busca 
 <li>Público: Forneça feedback sobre um show após o seu acontecimento</li>
 </ul>
 </ul>
+
+
+## Acesso ao Projeto
+### Pré-requisitos
+
+Inicialmente, é necessário ter instalado em sua máquina as seguintes ferramentas:
+[Git](https://git-scm.com), [Python](https://www.python.org/downloads/)
+
+Além disso, é recomendável ter um editor de código instalado, como por exemplo o [VS Code](https://code.visualstudio.com)
+
+### Rodando o código
+
+'''bash
+1. Clone este repositório
+
+        $ git clone <https://github.com/Alfaias-da-Lama/Hoje_e_onde.git>
+
+2. Acesse a pasta do projeto no terminal/cmd
+
+        $ cd Hoje_e_onde
+
+3. Abra o projeto no seu editor escolhido para ter acesso às páginas de código desenvolvidas
+
+
+
+## Tecnologias Utilizadas
+* Python: Linguagem de pogramação utilizada para desenvolver os códigos do funcionamento do aplicativo
+* Arquivos CSV: Forma utilizada para armazenamento e gerenciamento de dados dos usuários
+* Git: Sistema de controle de versão utilizado para gerenciar o código-fonte do projeto
+* Github: Plataforma de hospedagem de repositórios Git, utilizada para compartilhar os códigos do projeto
+* Figma: Plataforma utilizada para desenvolvimento das telas
+* Bibliotecas utilizadas: validate_email, os, time, datetime
+
+
+## Contribuidores
+Esse projeto só foi possível graças à ajuda dessas pessoas:
+* 
+
+
+
+## Autores
+* 
+
+
+
+## Licença
+MIT License
+
+Copyright (c) 2023 Alfaias-da-Lama
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+## Contato
+Se houver qualquer tipo de dificuldade ou dúvida, o email [inserir email] encontra-se sempre disponível para contato.
+
+Agradecemos pela atenção ao aplicativo desenvolvido e esperamos que, com o Hoje é Onde, a cultura musical recifense se mantenha viva e forte, conquistando mais espaço no cenário brasileiro.
+
+Atenciosamente, 
+
+Alfaias da Lama
