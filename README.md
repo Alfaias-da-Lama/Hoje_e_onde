@@ -57,8 +57,6 @@ Inicialmente, é necessário ter instalado em sua máquina as seguintes ferramen
 Além disso, é recomendável ter um editor de código instalado, como por exemplo o [VS Code](https://code.visualstudio.com)
 
 ### Rodando o código
-
-'''bash
 1. Clone este repositório
 
         $ git clone <https://github.com/Alfaias-da-Lama/Hoje_e_onde.git>
