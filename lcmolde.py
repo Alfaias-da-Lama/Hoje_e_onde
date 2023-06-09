@@ -29,19 +29,16 @@ class Publico:
         self.show = []
         self.mensagem = True
     def seguindo(self, show):
+        """adiciona mais um show que o cadastrado como Público vai seguir
+            Parameters:
+                show (obj): o show como objeto no molde contido nesse arquivo que o usuario quer seguir"""
         self.show.append(show)
         self.mensagem = False
-    def verify(self):
-        for index, show in self.show:
-            if show.temporest <= datetime.date(0000/00/00) and not show.feedback:
-                self.show.pop(index)
-                return(False)
-            elif show.temporest <= datetime.date(0000/00/00) and show.feedback:
-                print(f'Você pode dar o feedback do show {show.banda} no {show.lugar}!')
-                return(True)
-        if self.show == []:
-            self.mensagem = True
+    
+    
     def salvar_dados(self):
+        """função que pega as alterações feitas em relação a shows seguidos e feedbacks e salva
+        no arquivo csv"""
         memoria_csv = bd.getlist('perfilXpublico.csv')
         for publico in memoria_csv:
             if publico[0] == self.usuario:
@@ -66,6 +63,9 @@ class show:
         else:
             self.feedback = True
     def temporest(self):
+        """Pega a hora do show e calcula quantos dias faltam para o show começar
+            Returns:
+                delta.days (int): quantos dias faltam para o show começar"""
         datapadrao = self.data.split('/')
         dia = int(datapadrao[0])
         mes = int(datapadrao[1])
@@ -77,7 +77,10 @@ class show:
         elif datapadrao <= hoje:
             delta = hoje - datapadrao
         return(delta.days)
-    def feedback(usuario):
+    def feedback(self, usuario):
+        """cria uma mensagem de feedback no show, para ser salvo posteriormente
+            Parameters:
+                usuario (object): o usuario que está criando a mensagem de feedback"""
         mensagem = input(f'Dê seu feedback sobre o show da {self.banda} no {self.local}: ')
         if self.feedback:
             self.mensagem += f'/{usuario.usuario} - {mensagem}'
@@ -85,6 +88,7 @@ class show:
             self.mensagem += f'{usuario.usuario} - {mensagem}'
         self.feedback = True
     def salvar_dados(self):
+        """salva as alterações em relação a shows seguidos no arquivo csv"""
         memoria_csv = bd.getlist('agenda.csv')
         for show in memoria_csv:
             if show[0] == self.banda:

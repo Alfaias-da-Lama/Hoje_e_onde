@@ -3,62 +3,75 @@ import logincadas as lc
 import datetime as dt
 import lcmolde as molde
 def mostrar_feedback(destinatario):
-    mostrar = False
-    shows = getlist('agenda.csv')
-    valshows = getlistagenda()
-    for linha in shows:
-        if not(linha in valshows):
-            show = molde.show(linha)
-            if show.feedback and (show.banda == destinatario or show.local == destinatario):
-                for mensagem in show.mensagem.split('/'):
-                    print(f"{show.local}, {show.data} --> {mensagem}")
-                    mostrar = True
+    try:
+        mostrar = False
+        shows = getlist('agenda.csv')
+        valshows = getlistagenda()
+        for linha in shows:
+            if not(linha in valshows):
+                show = molde.show(linha)
+                if show.feedback and (show.banda == destinatario or show.local == destinatario):
+                    for mensagem in show.mensagem.split('/'):
+                        print(f"{show.local}, {show.data} --> {mensagem}")
+                        mostrar = True
+                else:
+                    continue
             else:
                 continue
-        else:
-            continue
-    if not mostrar:
-        print("Sem feedbacks para shows realizados ainda")
+        if not mostrar:
+            print("Sem feedbacks para shows realizados ainda")
+    except:
+        print("\33[31mErro ao mostrar shows\33[m")
+
 
 def getlistagenda():
-    with open('agenda.csv', 'r', encoding='utf-8') as arquivo:
-        conteudo = arquivo.readlines()
-        for linha in range(len(conteudo)):
-            conteudo[linha] =conteudo[linha].split(';')
-            for palavra in range(len(conteudo[linha])):
-               conteudo[linha][palavra] =conteudo[linha][palavra].strip()
-    conteudofiltrado = []
-    for index, linha in enumerate(conteudo):
-        if index == 0:
-            conteudofiltrado.append(linha)
-        else:
-            try:
-                if (dt.datetime.now().year > int(linha[2].split('/')[2])): 
-                    pass
-                elif (dt.datetime.now().year == int(linha[2].split('/')[2])):
-                    if (dt.datetime.now().month > int(linha[2].split('/')[1])):
-                        pass
-                    elif (dt.datetime.now().month == int(linha[2].split('/')[1])):
-                        if (dt.datetime.now().day > int(linha[2].split('/')[0])):
-                            pass
-                        else:
-                            conteudofiltrado.append(linha)
-                    else:
+    try:
+        with open('agenda.csv', 'r', encoding='utf-8') as arquivo:
+            conteudo = arquivo.readlines()
+            for linha in range(len(conteudo)):
+                conteudo[linha] =conteudo[linha].split(';')
+                for palavra in range(len(conteudo[linha])):
+                    conteudo[linha][palavra] =conteudo[linha][palavra].strip()
+        conteudofiltrado = []
+        for index, linha in enumerate(conteudo):
+            if index == 0:
+                conteudofiltrado.append(linha)
+            else:
+                try:
+                    if (dt.datetime.now().year <= int(linha[2].split('/')[2])): 
                         conteudofiltrado.append(linha)
-                else:
-                    conteudofiltrado.append(linha)
-            except(IndexError):
-                continue
-    return(conteudofiltrado)
+                    elif (dt.datetime.now().year == int(linha[2].split('/')[2])):
+                        if (dt.datetime.now().month <= int(linha[2].split('/')[1])):
+                            conteudofiltrado.append(linha)
+                        elif (dt.datetime.now().month == int(linha[2].split('/')[1])):
+                            if (dt.datetime.now().day <= int(linha[2].split('/')[0])):
+                                conteudofiltrado.append(linha)
+                            else:
+                                pass
+                        else:
+                            pass
+                    else:
+                        pass
+                except(IndexError):
+                    continue
+        return(conteudofiltrado)
+    except(FileNotFoundError):
+        print("\33[31mArquivo não encontrado reinicie o programa\33[m")
+
 
 def getlist(arq):
-    with open(arq, 'r', encoding='utf-8') as arquivo:
-        conteudo = arquivo.readlines()
-        for linha in range(len(conteudo)):
-            conteudo[linha] =conteudo[linha].split(';')
-            for palavra in range(len(conteudo[linha])):
-               conteudo[linha][palavra] =conteudo[linha][palavra].strip()
-    return(conteudo)
+    try:
+        with open(arq, 'r', encoding='utf-8') as arquivo:
+            conteudo = arquivo.readlines()
+            for linha in range(len(conteudo)):
+                conteudo[linha] =conteudo[linha].split(';')
+                for palavra in range(len(conteudo[linha])):
+                    conteudo[linha][palavra] =conteudo[linha][palavra].strip()
+        return(conteudo)
+    except(FileNotFoundError):
+        print("\33[31mArquivo não encontrado reinicie o programa\33[m")
+        
+
 
 def mostrartabela(excluir=[0,1,2,7], content=[]):
     for index, linha in enumerate(content):
@@ -75,6 +88,7 @@ def mostrartabela(excluir=[0,1,2,7], content=[]):
             else:
                 continue
         print()
+
 
 def mostrartabelafiltro(excluir=[0,1,2,7], content=[], filtro=[]):
     for index, linha in enumerate(content):
