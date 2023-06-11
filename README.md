@@ -80,12 +80,16 @@ Além disso, é recomendável ter um editor de código instalado, como por exemp
 
 ## Contribuidores
 Esse projeto só foi possível graças à ajuda dessas pessoas:
-* 
+* Gustavo Akira
+* Samuel Buarque
 
 
 
 ## Autores
-* 
+* Evaldo Galdino
+* João Fittipaldi
+* Pedro Dhalia
+* Talita Lins
 
 
 
