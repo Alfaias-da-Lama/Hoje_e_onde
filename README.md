@@ -118,7 +118,7 @@ SOFTWARE.
 
 
 ## Contato
-Se houver qualquer tipo de dificuldade ou dúvida, o email [inserir email] encontra-se sempre disponível para contato.
+Se houver qualquer tipo de dificuldade ou dúvida, a equipe encontra-se sempre disponível para contato.
 
 Agradecemos pela atenção ao aplicativo desenvolvido e esperamos que, com o Hoje é Onde, a cultura musical recifense se mantenha viva e forte, conquistando mais espaço no cenário brasileiro.
 
