@@ -1,4 +1,5 @@
 import display as dp
+import menu
 
 def getlist(arq):
     """essa função cria uma matriz separando os valores do arquivo csv por linha e palavra
@@ -115,7 +116,7 @@ def mostrarbanda(contato=False):
             excluir.append(7)
         bandas = getlist('perfilXbandas.csv')
         mostrartabela(content=bandas)
-        resposta = menu.menu(['procurar por nome', 'procurar por estilo', 'procurar por endereço'])
+        resposta = menu.menu(['procurar por nome', 'procurar por estilo', 'procurar por endereço', 'voltar'])
         if resposta == 1:
             filtro = input('por qual nome voce deseja buscar? ')
             mostrartabelafiltro(content=bandas, filtro=[3, filtro], excluir=excluir)
@@ -125,6 +126,8 @@ def mostrarbanda(contato=False):
         elif resposta == 3:
             filtro = input('por qual bairro voce deseja buscar? ')
             mostrartabelafiltro(content=bandas, filtro=[5, filtro], excluir=excluir)
+        elif resposta == 4:
+            pass
     except Exception as e:
         print(f"\33[31mErro ao executar função: {e}\33[m")
 
@@ -160,7 +163,7 @@ def mostraragenda():
     try:
         agenda = getlistagenda()
         mostrartabela(content=agenda, excluir = [])
-        resposta = menu.menu(['procurar por bairro', 'procurar por local', 'procurar por banda'])
+        resposta = menu.menu(['procurar por bairro', 'procurar por local', 'procurar por banda', 'sair'])
         if resposta == 1:
             filtro = input('por qual bairro voce deseja buscar? ')
             mostrartabelafiltro(content=locais, filtro=[3, filtro], excluir=[999])
@@ -170,6 +173,8 @@ def mostraragenda():
         elif resposta == 3:
             filtro = input('por qual banda voce deseja buscar? ')
             mostrartabelafiltro(content=bandas, filtro=[0, filtro], excluir=[999])
+        elif resposta == 4:
+            pass
     except Exception as e:
         print(f"\33[31mErro ao executar função: {e}\33[m")
 

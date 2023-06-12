@@ -25,17 +25,23 @@ try:
             usuario = lc.login(arqbanda, arqlocal, arqpublico)
         elif resposta == 2:
             usuario = lc.cadastro(arqbanda, arqlocal, arqpublico)
-        if resposta == 3 or usuario[0] == 'sem cadastro':
-            sl.pagina_semlog()
+        try:
+            if resposta == 3 or usuario[0] == 'sem cadastro':
+                sl.pagina_semlog()
+        except(NameError):
+            pass
         if resposta == 4:
             print("Até a próxima")
             break
-        if usuario[0] == 'banda':
-            bd.pagina_de_banda(usuario=usuario[1])
-        elif usuario[0] == 'local':
-            lo.pagina_de_local(usuario=usuario[1])
-        elif usuario[0] == 'publico':
-            pb.pagina_publico(usuario= usuario[1])
+        try:
+            if usuario[0] == 'banda':
+                bd.pagina_de_banda(usuario=usuario[1])
+            elif usuario[0] == 'local':
+                lo.pagina_de_local(usuario=usuario[1])
+            elif usuario[0] == 'publico':
+                pb.pagina_publico(usuario= usuario[1])
+        except(NameError):
+            pass
 except(KeyboardInterrupt):
     print("""Saindo do Hoje é onde...
 Volte sempre""")
