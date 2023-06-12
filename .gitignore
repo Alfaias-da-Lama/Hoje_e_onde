@@ -396,3 +396,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+#Arquive Types
+*.csv
+*.xlsx
+*.txt
+
+#Specific arquives
+*testar.py
