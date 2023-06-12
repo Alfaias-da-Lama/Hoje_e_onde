@@ -3,6 +3,10 @@ import menu
 import lcmolde as lc
 
 def alterarpublico(arq, usuario):
+    """essa função serve para alterar uma linha específica do arquivo perfilXpublico.
+        Parameters:
+            arq (str): nome do arquivo que vai ser alterado
+            usuario (obj): usuario como objeto que vai ser usado na função de pegar perfil"""
     prosseguir = True
     linha = bd.pegarperfil(arq, usuario)
     memoria_csv = getlist(arq)
@@ -64,14 +68,18 @@ def alterarpublico(arq, usuario):
             with open(arq, 'a', encoding='utf-8') as arquivo:
                 for linha in range(1, len(memoria_csv)):
                     arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strip()}\n')
-            print('\33[31mCadastro atualizado!\33[m')
+            print('\33[32mCadastro atualizado!, faça login novamente\33[m')
         except:
             print("\33[31mErro ao atualizar cadastro, tente novamente\33[m")
     else:
         print( '\33[31mCancelando operação... \33[m')
 
 
-def seguirshow(arqusuario, usuario):  
+def seguirshow(usuario):
+    """essa função faz o usuario seguir um evento especifico da agenda.csv para acompanhar quantos
+    dias faltam para a data do evento e posteriormente ser capaz de dar feedbacks
+        Parameters:
+            usuario (obj): recebe o usuario como objeto para associar o show seguido a ele"""
     memoria_show = bd.getlistagenda()
     bd.mostrartabela(excluir=[], content=memoria_show)
     while True:
@@ -84,6 +92,9 @@ def seguirshow(arqusuario, usuario):
 
 
 def mostrarshows(usuario):
+    """essa função mostra os shows seguidos ao usuario, mostrando as informações do show e quantos dias faltam para a data
+        Parameters:
+            usuario (obj): recebe o usuario como objeto para verificar os shows associados"""
     try:
         if usuario.show != []:
             print('shows seguidos:')
@@ -96,6 +107,9 @@ def mostrarshows(usuario):
 
 
 def dar_feedback(usuario):
+    """essa função cria uma mensagem de feedback para um show seguido pelo usuario e associa ao show
+        Parameters:
+            usuario (obj): recebe o usuario para verificação de show e para associar o nome ao feedback"""
     cont = 0
     valshow = bd.getlistagenda()
     for show in usuario.show:
@@ -111,6 +125,10 @@ def dar_feedback(usuario):
 
 
 def pagina_publico(usuario):
+    """função com o menu da pagina de usuarios cadastrados como público, com suas devidas funções
+        Parameters:
+            usuario (obj): recebe o usuario como objeto para ser usado nas funções associadas"""
+    usuario.resgatar_shows()
     while True:
         mostrarshows(usuario)
         escolha = menu.menu2(titulo="Página Público", componentes=["Ver Bandas", "Ver Locais", "Ver Agenda", "Editar Perfil", "Seguir show", "Dar Feedback de shows assistidos", "Sair"])
@@ -123,7 +141,7 @@ def pagina_publico(usuario):
         elif escolha == 4:
             alterarpublico(arq='perfilXpublico.csv', usuario=usuario.usuario)
         elif escolha == 5:
-            seguirshow(arqusuario='perfilXpublico.csv', usuario=usuario)
+            seguirshow(usuario=usuario)
         elif escolha == 6:
             dar_feedback(usuario)
         elif escolha == 7:

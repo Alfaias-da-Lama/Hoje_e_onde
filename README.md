@@ -75,13 +75,19 @@ Além disso, é recomendável ter um editor de código instalado, como por exemp
 * Git: Sistema de controle de versão utilizado para gerenciar o código-fonte do projeto
 * Github: Plataforma de hospedagem de repositórios Git, utilizada para compartilhar os códigos do projeto
 * Figma: Plataforma utilizada para desenvolvimento das telas
-* Bibliotecas utilizadas: validate_email, os, time, datetime
+* Bibliotecas utilizadas: validate_email, os, time, datetime, win32com.client
 
 
 ## Contribuidores
 Esse projeto só foi possível graças à ajuda dessas pessoas:
 * Gustavo Akira
 * Samuel Buarque
+* Júlia Dos Santos Pereira
+* Lucas de Gusmão Barros e Silva
+* Felipe de Carvalho Ferrari
+* Heloísa Meira Lins Galvão de Albuquerque
+* Giovanna De Castro Sena E Silva De Melo
+* Luciana de Oliveira Modesto
 
 
 

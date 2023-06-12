@@ -32,6 +32,8 @@ class Publico:
 
     
     def regatar_shows(self):
+        """essa função pegas os eventos associados ao arquivo do usuario e a lista de idx show e associa eles ao molde de show
+        salvando na lista show"""
         shows = bd.getlist('agenda.csv')
         for numero in idx_show:
             self.show.append(show(shows[numero]))

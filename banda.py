@@ -5,6 +5,9 @@ import lcmolde as molde
 
 
 def mostrar_feedback(destinatario):
+    """essa função mostra ao usuario de banda ou local os feedbacks dos shows que ja passaram em formato de tabela
+        Parameters:
+            destinatario (str): o nome da banda ou local que está procurando os feedbacks"""
     try:
         mostrar = False
         shows = dp.getlist('agenda.csv')
@@ -27,6 +30,11 @@ def mostrar_feedback(destinatario):
 
 
 def alterarbanda(arq, usuario):
+    """essa função serve para alterar uma linha específica do arquivo perfilXbanda, usada para
+    alterar dados de cadastro de usuarios tipo banda
+        Parameters:
+            arq (str): nome do arquivo que vai ser alterado
+            usuario (obj): usuario como objeto que vai ser usado na função de pegar perfil"""
     try:
         prosseguir = True
         linha = dp.pegarperfil(arq, usuario)
@@ -116,7 +124,7 @@ def alterarbanda(arq, usuario):
             with open(arq, 'a', encoding='utf-8') as arquivo:
                 for linha in range(1, len(memoria_csv)):
                     arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strp()}\n')
-            print('\33[31mCadastro atualizado!\33[m')
+            print('\33[31mCadastro atualizado!, faça login novamente\33[m')
         else:
             print( '\33[31mCancelando operação... \33[m')
     except(KeyboardInterrupt):
@@ -124,6 +132,11 @@ def alterarbanda(arq, usuario):
 
 
 def alterarartist(arq, usuario):
+    """essa função serve para alterar uma linha específica do arquivo perfilXbanda, usada para
+    alterar dados de cadastro de usuarios do tipo artista
+        Parameters:
+            arq (str): nome do arquivo que vai ser alterado
+            usuario (obj): usuario como objeto que vai ser usado na função de pegar perfil"""
     prosseguir = True
     linha = dp.pegarperfil(arq, usuario)
     memoria_csv = dp.getlist(arq)
@@ -208,6 +221,9 @@ def alterarartist(arq, usuario):
 
 
 def pagina_de_banda(usuario):
+    """essa função é um menu com as funções designadas aos usuarios de bandas e artistas
+        Parameters:
+            usuario (obj): recebe o usuario como objeto para ser usados nas outras funções associadas"""
     try:
         while True:
             resposta = menu.menu2('Página de Banda', ['Ver outras bandas','Ver locais', 'Ver agenda', 'Alterar perfil', "Ver feedbacks", 'Sair'])

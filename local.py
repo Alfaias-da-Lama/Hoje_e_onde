@@ -24,6 +24,9 @@ def ler_ultimo_index(arq):
 
 
 def criar_evento(local):
+    """cria uma nova linha no arquivo agenda.csv com informações recebidas do usuario sobre um show
+        Parameters:
+            local (str):  nome do local do usuario que está criando o show"""
     try:
         while True:
             banda = input("digite qual banda vai tocar no show: ")
@@ -167,6 +170,10 @@ def atualizar(local):
 
 
 def alterar_local(arq, usuario):
+    """essa função serve para alterar uma linha específica do arquivo perfilXlocais.
+        Parameters:
+            arq (str): nome do arquivo que vai ser alterado
+            usuario (obj): usuario como objeto que vai ser usado na função de pegar perfil"""
     try:
         prosseguir = True
         linha = dp.pegarperfil(arq, usuario)
@@ -255,6 +262,9 @@ def alterar_local(arq, usuario):
 
 
 def pagina_de_local(usuario):
+    """essa função cria um menu com as funções disponiveis aos usuarios do tipo locais
+        Parameters:
+            usuario (obj): recebe o usuario como objeto para ser usado nas funções associadas"""
     try:
         while True:
             resposta = menu.menu2('Página de Local', ['Ver bandas','Ver outros locais', 'Ver agenda', "Criar evento","Editar Evento", 'Alterar perfil', "Ver feedbacks", 'Sair'])

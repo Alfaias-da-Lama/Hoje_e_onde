@@ -116,6 +116,14 @@ def criararquivo(nome, cabeçalho):
 
 
 def cadastro_artista(usuario, senha, arqbanda):
+    """essa função recebe informações de cadastro do usuario e salva elas no arquivo csv como uma nova linha
+        Parameters:
+            usuario (str): recebe como string o usuario para salvar no arquivo
+            senha (str): recebe como string a senha para salvar no arquivo
+            arqbanda (str): recebe como string o nome do arquivo que vai receber o novo cadastro
+            
+        Returns:
+            cadastrado (list): volta uma lista que no index 0 tem o tipo de cadastro realizado e no 1 tem o usuario como objeto"""
     while True:
         grupo = input('voce é artista [solo] ou tem [banda]? ')
         if grupo != 'banda' and grupo != 'solo':
@@ -167,11 +175,20 @@ def cadastro_artista(usuario, senha, arqbanda):
         print('\33[31mErro ao cadastrar, tente novamente\33[m')
     else:
         print('\33[33mCadastro realizado com sucesso!\33[m')
-        user = lc.Banda(perfil=[usuario,senha,tipo,nomebanda,integrantes,bairro,estilo,ctt]) 
-        return(['banda',user]) 
+        user = lc.Banda(perfil=[usuario,senha,tipo,nomebanda,integrantes,bairro,estilo,ctt])
+        cadastrado = ['banda',user]
+        return(cadastrado) 
 
 
 def cadastro_local(usuario, senha, arqlocal):
+    """essa função recebe informações de cadastro do usuario e salva elas no arquivo csv como uma nova linha
+        Parameters:
+            usuario (str): recebe como string o usuario para salvar no arquivo
+            senha (str): recebe como string a senha para salvar no arquivo
+            arqlocal (str): recebe como string o nome do arquivo que vai receber o novo cadastro
+            
+        Returns:
+            cadastrado (list): volta uma lista que no index 0 tem o tipo de cadastro realizado e no 1 tem o usuario como objeto"""
     nomelocal = input('insira o nome do seu local: ')
     endereço = input('insira o endereço do local: ')
     estilo = input('insira o estilo musical de preferencia do local: ')
@@ -201,6 +218,14 @@ def cadastro_local(usuario, senha, arqlocal):
 
 
 def cadastro_publico(usuario, senha, arqpublico):
+    """essa função recebe informações de cadastro do usuario e salva elas no arquivo csv como uma nova linha
+        Parameters:
+            usuario (str): recebe como string o usuario para salvar no arquivo
+            senha (str): recebe como string a senha para salvar no arquivo
+            arqpublico (str): recebe como string o nome do arquivo que vai receber o novo cadastro
+            
+        Returns:
+            cadastrado (list): volta uma lista que no index 0 tem o tipo de cadastro realizado e no 1 tem o usuario como objeto"""
     try:
         with open(arqpublico,'a', newline='', encoding='utf-8') as arquivo:
             arquivo.write(f'{usuario};{senha}\n')
@@ -215,6 +240,11 @@ def cadastro_publico(usuario, senha, arqpublico):
 
 
 def verificar_perfil(arq, user, password):
+    """essa função procura no arquivo se já existe um cadastro com o mesmo nome e senha do usuario
+        Parameters:
+            arq (str): recebe o nome do arquivo que vai ser procurado como string
+            user (str): recebe o nome de usuario a ser verificado como string
+            password (str): recebe a senha do usuario a ser verificado como string"""
     try:
         with open(arq, 'r', newline='', encoding='utf-8') as arquivo:
             perfis = arquivo.readlines()
@@ -241,8 +271,9 @@ def cadastro(arqbanda, arqlocal, arqpublico):
             arqpublico (str): o nome do arquivo dos usuarios do tipo publico
             
         Returns:
-            (tuple): retorna em uam tupla o tipo do cadastro no index 0 e o objeto de usuario seguindo o molde do
-            arquivo lcmolde no index 1"""
+            castrado (list): retorna em uam tupla o tipo do cadastro no index 0 e o objeto de usuario seguindo o molde do
+            arquivo lcmolde no index 1
+            sc (list): retorna uma lista que no index 0 indica que o usuario vai prosseguir  sem cadastro"""
     print('dados do cadastro')
     try:
         while True:
@@ -295,24 +326,39 @@ def cadastro(arqbanda, arqlocal, arqpublico):
                 break
 
         if escolha == 'artista': 
-            return(cadastro_artista(usuario, senha, arqbanda))
+            cadastrado = cadastro_artista(usuario, senha, arqbanda)
+            return(cadastrado)
 
 
         elif escolha == 'local':
-            return(cadastro_local(usuario, senha, arqlocal))
+            cadastrado = cadastro_local(usuario, senha, arqlocal)
+            return(cadastrado)
 
 
         elif escolha == 'publico':
-            return(cadastro_publico(usuario, senha, arqpublico))
+            cadastrado = cadastro_publico(usuario, senha, arqpublico)
+            return(cadastrado)
     except(KeyboardInterrupt):
         print('\33[31mCadastro cancelado\33[m')
-        return(['sem cadastro'])
+        sc = ['sem cadastro']
+        return(sc)
     except:
         print(f'\33[31mErro ao cadastrar\33[m')
-        return(['sem cadastro'])
+        sc = ['sem cadastro']
+        return(sc)
 
 
 def login(arqbanda, arqlocal, arqpublico):
+    """essa função pede ao usuario o nome de usuario e senha e verifica se esses dados batem com o de algum arquivo
+    caso não bata ele da outro menu em que o usuario pode tentar novamente, cadastrar ou seguir sem login
+        Parameters:
+            arqbanda (str): nome do arquivo de perfil de banda em string
+            arqlocal (str): nome do arquivo de perfil de locais em string
+            arqpublico (str): nome do arquivo de perfil de publico em string
+            
+        Returns: 
+        cadastrado (list): devolve uma lista que no index 0 diz o tipo de cadastro
+        sc (list): devolve uma lista que no index 0 indica que o usuario vai prosseguir sem cadastro"""
     try:
         while True:
             banda = False
@@ -324,7 +370,8 @@ def login(arqbanda, arqlocal, arqpublico):
                 print("/33[32mUsuario encontrado como Artista/Banda\33[m")
                 usuario = lc.Banda(perfil=temperfil[1])
                 banda = True
-                return(["banda", usuario])
+                cadastrado = ["banda", usuario]
+                return(cadastrado)
                 break
 
             if not banda:
@@ -333,7 +380,8 @@ def login(arqbanda, arqlocal, arqpublico):
                     print("/33[32mUsuario encontrado como Dono de estabelecimento\33[m")
                     usuario = lc.Local(perfil=temperfil[1])
                     local = True
-                    return(["local", usuario])
+                    cadastrado = ["local", usuario]
+                    return(cadastrado)
                     break
 
             if not banda and not local:
@@ -341,7 +389,8 @@ def login(arqbanda, arqlocal, arqpublico):
                 if temperfil[0]:
                     print("/33[32mUsuario encontrado como Público\33[m")
                     usuario = lc.Publico(perfil=perfil)
-                    return(["Publico", usuario])
+                    cadastrado = ["Publico", usuario]
+                    return(cadastrado)
                     break
 
             if temperfil[0] == False:
@@ -350,15 +399,20 @@ def login(arqbanda, arqlocal, arqpublico):
                 if resposta2 == 1:
                     continue
                 elif resposta2 == 2:
-                    cadastro(arqbanda, arqlocal, arqpublico)
+                    cadastrado = cadastro(arqbanda, arqlocal, arqpublico)
+                    return(cadastrado)
                 elif resposta2 == 3:
-                    return(['sem cadastro'])
+                    sc = ['sem cadastro']
+                    return(sc)
                     break   
                 else:
                     print('usuário encontrado')
                     break
     except(KeyboardInterrupt):
         print("\33[31mLogin cancelado\33[m")
+        sc = ["sem cadastro"]
         return(["sem cadastro"])
-    except Exception as e:
-        print(f"\33[31mErro no Login, erro: {e}\33[m")
+    except:
+        print("\33[31mErro ao fazer login\33[m")
+        sc = ["sem cadastro"]
+        return(["sem cadastro"])

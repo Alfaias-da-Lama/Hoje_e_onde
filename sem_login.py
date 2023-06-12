@@ -1,6 +1,7 @@
 import menu
 import display as dp
 def pagina_semlog():
+    """essa função serve para criar um menu com as opções para usuarios que não se cadastraram"""
     try:
         escolha = menu.menu2(titulo="Hoje é Onde?", componentes=["Ver locais", "Ver bandas", "Ver agenda","Seguir show", "Voltar ao menu"])
         if escolha == 1:
