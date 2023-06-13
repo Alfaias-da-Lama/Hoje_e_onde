@@ -3,6 +3,8 @@ import menu
 from validate_email import validate_email
 from getpass import getpass
 import win32com.client as w3
+from time import sleep
+import display as dp
 
 def enviaremail(destinatario,usuario,senha):
     """(N\A) envia um email ao usuario para recuperação de senha
@@ -147,14 +149,20 @@ def cadastro_artista(usuario, senha, arqbanda):
     if solo:
         integrantes = 'NaN'
     else:
-        qtdinte = int(input('quantos integrantes tem a sua banda: '))
+        while True:
+            try:
+                qtdinte = int(input('quantos integrantes tem a sua banda: '))
+            except(ValueError):
+                print("\33[31mInsira um número válido\33[m")
+            else:
+                break
         integrantes = []
         for integrante in range(qtdinte):
             integrante = input(f'digite o nome do integrante {integrante+1}: ')
             if '/' in integrante:
                 print("por favor não use o caracter (/) no preenchimento")
             else:
-                integrantes.append()
+                integrantes.append(integrante)
         integrantes = '/'.join(integrantes)
     ctt = []
     while True:
@@ -168,14 +176,14 @@ def cadastro_artista(usuario, senha, arqbanda):
     ctt = '/'.join(ctt)
     try:
         with open(arqbanda,'a', newline='', encoding='utf-8') as arquivo:
-            arquivo.write(f'{usuario};{senha};{tipo};{nomebanda};{integrantes};{bairro};{estilo};{ctt}\n')
+            arquivo.write(f'{usuario};{senha};{grupo};{nomebanda};{integrantes};{bairro};{estilo};{ctt}\n')
     except(FileNotFoundError):
         print('\33[31mArquivo não encontrado, reinicie o programa\33[31m')
-    except:
-        print('\33[31mErro ao cadastrar, tente novamente\33[m')
+    #except:
+        #print('\33[31mErro ao cadastrar, tente novamente\33[m')
     else:
         print('\33[33mCadastro realizado com sucesso!\33[m')
-        user = lc.Banda(perfil=[usuario,senha,tipo,nomebanda,integrantes,bairro,estilo,ctt])
+        user = lc.Banda(perfil=[usuario,senha,grupo,nomebanda,integrantes,bairro,estilo,ctt])
         cadastrado = ['banda',user]
         return(cadastrado) 
 
@@ -244,20 +252,25 @@ def verificar_perfil(arq, user, password):
         Parameters:
             arq (str): recebe o nome do arquivo que vai ser procurado como string
             user (str): recebe o nome de usuario a ser verificado como string
-            password (str): recebe a senha do usuario a ser verificado como string"""
+            password (str): recebe a senha do usuario a ser verificado como string
+            
+        Returns:
+            profile (list): retorna uma lista com uma valor True e um lista com o perfil
+            """
     try:
-        with open(arq, 'r', newline='', encoding='utf-8') as arquivo:
-            perfis = arquivo.readlines()
-            for perfil in perfis:
-                perfil = perfil.split(';')
-                if perfil[0] == user and perfil[1] == password:
-                    local = True
-                    print('perfil encontrado')
-                    temperfil = True
-                    break
-                else:
-                    temperfil = False
-            return([temperfil, perfil])
+        temperfil = False
+        perfis = dp.getlist(arq)
+        for perfil in perfis:
+            print(perfil[0], user, perfil[1], password)
+            if str(perfil[0]) == str(user) and str(perfil[1]) == str(password).strip():
+                print('perfil encontrado')
+                temperfil = True
+                break
+        if temperfil:
+            profile = [temperfil, perfil]
+            return(profile)
+        else:
+            return([temperfil])
     except(FileNotFoundError):
         print("\33[31mArquivo não encontrado, reinicie o programa\33[m")
 
@@ -277,17 +290,11 @@ def cadastro(arqbanda, arqlocal, arqpublico):
     print('dados do cadastro')
     try:
         while True:
-            while True:
-                usuario = input('insira seu nome de usuário: ')
-                if usuario.isalpha(): 
-                    break
-                else:
-                    print('\33[31mEsperado pelo menos 1 letra no usuario\33[m')
-            if validaruser(usuario=usuario, arqlocal=arqlocal, arqbanda=arqbanda, arqpublico=arqpublico): #validação se ja existe alguem com o mesmo nome
-                break
+            usuario = input('insira seu nome de usuário: ')
+            if validaruser(usuario=usuario, arqlocal=arqlocal, arqbanda=arqbanda, arqpublico=arqpublico): 
+                 break
             else:
                 print(f'ja existe um usuario com o cadastro {usuario}')
-                continue
         while True:
             while True:
                 senha = input('escolha uma senha: ')
@@ -342,10 +349,10 @@ def cadastro(arqbanda, arqlocal, arqpublico):
         print('\33[31mCadastro cancelado\33[m')
         sc = ['sem cadastro']
         return(sc)
-    except:
-        print(f'\33[31mErro ao cadastrar\33[m')
-        sc = ['sem cadastro']
-        return(sc)
+    #except:
+        #print(f'\33[31mErro ao cadastrar\33[m')
+        #sc = ['sem cadastro']
+        #return(sc)
 
 
 def login(arqbanda, arqlocal, arqpublico):
@@ -359,15 +366,19 @@ def login(arqbanda, arqlocal, arqpublico):
         Returns: 
         cadastrado (list): devolve uma lista que no index 0 diz o tipo de cadastro
         sc (list): devolve uma lista que no index 0 indica que o usuario vai prosseguir sem cadastro"""
-    try:
+    #try:
+    if True:
         while True:
             banda = False
             local = False
             user = input('insira seu usuário: ')
-            password = getpass(prompt='insira sua senha: ')
+            password = input('insira sua senha: ')
+            print(password)
+            print("verificando banda")
             temperfil = verificar_perfil(arq=arqbanda, user=user, password=password)
+            print(temperfil)
             if temperfil[0]:
-                print("/33[32mUsuario encontrado como Artista/Banda\33[m")
+                print("\33[32mUsuario encontrado como Artista/Banda\33[m")
                 usuario = lc.Banda(perfil=temperfil[1])
                 banda = True
                 cadastrado = ["banda", usuario]
@@ -375,9 +386,11 @@ def login(arqbanda, arqlocal, arqpublico):
                 break
 
             if not banda:
+                print("verificando local")
                 temperfil = verificar_perfil(arq=arqlocal, user=user, password=password)
+                print(temperfil)
                 if temperfil[0]:
-                    print("/33[32mUsuario encontrado como Dono de estabelecimento\33[m")
+                    print("\33[32mUsuario encontrado como Dono de estabelecimento\33[m")
                     usuario = lc.Local(perfil=temperfil[1])
                     local = True
                     cadastrado = ["local", usuario]
@@ -385,16 +398,18 @@ def login(arqbanda, arqlocal, arqpublico):
                     break
 
             if not banda and not local:
+                print("procurando publico")
                 temperfil = verificar_perfil(arq=arqpublico, user=user, password=password)
+                print(temperfil)
                 if temperfil[0]:
-                    print("/33[32mUsuario encontrado como Público\33[m")
-                    usuario = lc.Publico(perfil=perfil)
-                    cadastrado = ["Publico", usuario]
+                    print("\33[32mUsuario encontrado como Público\33[m")
+                    usuario = lc.Publico(perfil=temperfil[1])
+                    cadastrado = ["publico", usuario]
                     return(cadastrado)
                     break
 
-            if temperfil[0] == False:
-                print('''\33[31mPerfil não encontrado!\33[m''')
+            if not temperfil[0]:
+                print('\33[31mPerfil não encontrado!\33[m')
                 resposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
                 if resposta2 == 1:
                     continue
@@ -408,11 +423,13 @@ def login(arqbanda, arqlocal, arqpublico):
                 else:
                     print('usuário encontrado')
                     break
-    except(KeyboardInterrupt):
-        print("\33[31mLogin cancelado\33[m")
-        sc = ["sem cadastro"]
-        return(["sem cadastro"])
-    except:
-        print("\33[31mErro ao fazer login\33[m")
-        sc = ["sem cadastro"]
-        return(["sem cadastro"])
+    #except(KeyboardInterrupt):
+        #print("\33[31mLogin cancelado\33[m")
+        #sc = ["sem cadastro"]
+        #return(["sem cadastro"])
+        #sleep(1)
+    #except:
+        #print("\33[31mErro ao fazer login\33[m")
+        #sc = ["sem cadastro"]
+        #return(["sem cadastro"])
+        #sleep(1)

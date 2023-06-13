@@ -1,5 +1,6 @@
 import display as dp
 import menu
+import datetime as dt
 
 def getlist(arq):
     """essa função cria uma matriz separando os valores do arquivo csv por linha e palavra
@@ -33,13 +34,13 @@ def getlistagenda():
                 conteudofiltrado.append(linha)
             else:
                 try:
-                    if (dt.datetime.now().year <= int(linha[2].split('/')[2])): 
+                    if (dt.datetime.now().year < int(linha[3].split('/')[2])): 
                         conteudofiltrado.append(linha)
-                    elif (dt.datetime.now().year == int(linha[2].split('/')[2])):
-                        if (dt.datetime.now().month <= int(linha[2].split('/')[1])):
+                    elif (dt.datetime.now().year == int(linha[3].split('/')[2])):
+                        if (dt.datetime.now().month < int(linha[3].split('/')[1])):
                             conteudofiltrado.append(linha)
-                        elif (dt.datetime.now().month == int(linha[2].split('/')[1])):
-                            if (dt.datetime.now().day <= int(linha[2].split('/')[0])):
+                        elif (dt.datetime.now().month == int(linha[3].split('/')[1])):
+                            if (dt.datetime.now().day <= int(linha[3].split('/')[0])):
                                 conteudofiltrado.append(linha)
                             else:
                                 pass
@@ -54,18 +55,20 @@ def getlistagenda():
         print("\33[31mArquivo não encontrado reinicie o programa\33[m")
 
 
-def mostrartabela(excluir=[0,1,7], content=[]):
+def mostrartabela(excluir=[0,1,7], content=[], idx = True):
     """recebe uma matriz e coloca ela no terminal em formato de tabela, pode excluir alguns termos da tabela
     por defalt vem excluindo o 0,1,7 que corresponde ao login, senha e contato
         Parameters:
             excluir (list): lista dos index a serem excluidos
-            content (list): lista que vai ser formatada no terminal"""
+            content (list): lista que vai ser formatada no terminal
+            idx (bool): serve para mostrar ou não o index da tabela"""
     try:
         for index, linha in enumerate(content):
-            if index > 0:
-                print(f'{index}'.ljust(5), end=' ')
-            else:
-                print('index', end =' ')
+            if idx:
+                if index > 0:
+                    print(f'{index}'.ljust(5), end=' ')
+                else:
+                    print('index', end =' ')
             for palindex, palavra in enumerate(linha):
                 if not palindex in excluir:
                     if palavra == 'NaN':
@@ -153,6 +156,10 @@ def mostrarlocal(contato = False):
         elif resposta == 3:
             filtro = input('por qual estilo musical voce deseja buscar? ')
             mostrartabelafiltro(content=bandas, filtro=[8, filtro], excluir=excluir)
+        elif resposta == 4:
+            pass
+    except (KeyboardInterrupt):
+        print("\33[31mVoltando ao menu...\33[m")
     except Exception as e:
         print(f"\33[31mErro ao executar função: {e}\33[m")
 
