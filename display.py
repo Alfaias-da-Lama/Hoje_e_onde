@@ -77,7 +77,7 @@ def getlistagenda():
         print("\33[31mArquivo não encontrado reinicie o programa\33[m")
 
 
-def mostrartabela(excluir=[0,1,7], content=[], idx = True):
+def mostrartabela(excluir=[0,1,7], content=[], idx = False):
     """recebe uma matriz e coloca ela no terminal em formato de tabela, pode excluir alguns termos da tabela
     por defalt vem excluindo o 0,1,7 que corresponde ao login, senha e contato
         Parameters:

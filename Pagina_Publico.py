@@ -148,11 +148,11 @@ def pagina_publico(usuario):
         mostrarshows(usuario)
         escolha = menu.menu2(titulo="Página Público", componentes=["Ver Bandas", "Ver Locais", "Ver Agenda", "Editar Perfil", "Seguir show", "Dar Feedback de shows assistidos", "Sair"])
         if escolha == 1:
-            bd.mostrarbanda()
+            dp.mostrarbanda()
         elif escolha == 2:
-            bd.mostrarlocal()
+            dp.mostrarlocal()
         elif escolha == 3:
-            bd.mostraragenda()
+            dp.mostraragenda()
         elif escolha == 4:
             alterarpublico(arq='perfilXpublico.csv', usuario=usuario)
         elif escolha == 5:
