@@ -41,12 +41,10 @@ def validaruser(usuario, arqlocal, arqbanda, arqpublico):
         Returns:
             validacao (bool): Verdadeiro para se o nome não existe em nenhum arquivo
                             e falso para se existe"""
-    #iniciando variaveis
     listaarq = [arqbanda, arqlocal, arqpublico] 
     validacao = True 
     memoria = [] 
 
-    #preenchimento da variavel memoria
     try:
         for arquivo in listaarq:
             with open(arquivo, 'r', encoding='utf-8') as arquivo:
@@ -345,10 +343,10 @@ def cadastro(arqbanda, arqlocal, arqpublico):
         print('\33[31mCadastro cancelado\33[m')
         sc = ['sem cadastro']
         return(sc)
-    #except:
-        #print(f'\33[31mErro ao cadastrar\33[m')
-        #sc = ['sem cadastro']
-        #return(sc)
+    except:
+        print(f'\33[31mErro ao cadastrar\33[m')
+        sc = ['sem cadastro']
+        return(sc)
 
 
 def login(arqbanda, arqlocal, arqpublico):
