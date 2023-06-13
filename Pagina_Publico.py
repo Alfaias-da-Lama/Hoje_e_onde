@@ -113,7 +113,8 @@ def mostrarshows(usuario):
         if usuario.show != []:
             print('shows seguidos:')
             for show in usuario.show:
-                print(f'{show.banda.ljust(12)} {show.local.ljust(12)} {show.horastart.ljust(12)} {show.horaend.ljust(12)}, faltam {show.temporest} dias para o show começar')
+                dias = show.temporest()
+                print(f'{show.banda.ljust(12)} {show.local.ljust(12)} {show.horastart.ljust(12)} {show.horaend.ljust(12)}, faltam {dias} dias para o show começar')
         else:
             print(usuario.mensagem)
     #except:

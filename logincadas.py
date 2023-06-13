@@ -362,70 +362,70 @@ def login(arqbanda, arqlocal, arqpublico):
         Returns: 
         cadastrado (list): devolve uma lista que no index 0 diz o tipo de cadastro
         sc (list): devolve uma lista que no index 0 indica que o usuario vai prosseguir sem cadastro"""
-    #try:
-    if True:
-        while True:
-            banda = False
-            local = False
-            user = input('insira seu usuário: ')
-            password = input('insira sua senha: ')
-            print(password)
-            print("verificando banda")
-            temperfil = verificar_perfil(arq=arqbanda, user=user, password=password)
-            print(temperfil)
-            if temperfil[0]:
-                print("\33[32mUsuario encontrado como Artista/Banda\33[m")
-                usuario = lc.Banda(perfil=temperfil[1])
-                banda = True
-                cadastrado = ["banda", usuario]
-                return(cadastrado)
-                break
-
-            if not banda:
-                print("verificando local")
-                temperfil = verificar_perfil(arq=arqlocal, user=user, password=password)
+    try:
+        if True:
+            while True:
+                banda = False
+                local = False
+                user = input('insira seu usuário: ')
+                password = input('insira sua senha: ')
+                print(password)
+                print("verificando banda")
+                temperfil = verificar_perfil(arq=arqbanda, user=user, password=password)
                 print(temperfil)
                 if temperfil[0]:
-                    print("\33[32mUsuario encontrado como Dono de estabelecimento\33[m")
-                    usuario = lc.Local(perfil=temperfil[1])
-                    local = True
-                    cadastrado = ["local", usuario]
+                    print("\33[32mUsuario encontrado como Artista/Banda\33[m")
+                    usuario = lc.Banda(perfil=temperfil[1])
+                    banda = True
+                    cadastrado = ["banda", usuario]
                     return(cadastrado)
                     break
 
-            if not banda and not local:
-                print("procurando publico")
-                temperfil = verificar_perfil(arq=arqpublico, user=user, password=password)
-                print(temperfil)
-                if temperfil[0]:
-                    print("\33[32mUsuario encontrado como Público\33[m")
-                    usuario = lc.Publico(perfil=temperfil[1])
-                    cadastrado = ["publico", usuario]
-                    return(cadastrado)
-                    break
+                if not banda:
+                    print("verificando local")
+                    temperfil = verificar_perfil(arq=arqlocal, user=user, password=password)
+                    print(temperfil)
+                    if temperfil[0]:
+                        print("\33[32mUsuario encontrado como Dono de estabelecimento\33[m")
+                        usuario = lc.Local(perfil=temperfil[1])
+                        local = True
+                        cadastrado = ["local", usuario]
+                        return(cadastrado)
+                        break
 
-            if not temperfil[0]:
-                print('\33[31mPerfil não encontrado!\33[m')
-                resposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
-                if resposta2 == 1:
-                    continue
-                elif resposta2 == 2:
-                    cadastrado = cadastro(arqbanda, arqlocal, arqpublico)
-                    return(cadastrado)
-                elif resposta2 == 3:
-                    sc = ['sem cadastro']
-                    return(sc)
-                    break   
-                else:
-                    print('usuário encontrado')
-                    break
-    #except(KeyboardInterrupt):
-        #print("\33[31mLogin cancelado\33[m")
-        #sc = ["sem cadastro"]
-        #return(["sem cadastro"])
-        #sleep(1)
-    #except:
-        #print("\33[31mErro ao fazer login\33[m")
-        #sc = ["sem cadastro"]
-        #return(["sem cadastro"])
-        #sleep(1)
+                if not banda and not local:
+                    print("procurando publico")
+                    temperfil = verificar_perfil(arq=arqpublico, user=user, password=password)
+                    print(temperfil)
+                    if temperfil[0]:
+                        print("\33[32mUsuario encontrado como Público\33[m")
+                        usuario = lc.Publico(perfil=temperfil[1])
+                        cadastrado = ["publico", usuario]
+                        return(cadastrado)
+                        break
+
+                if not temperfil[0]:
+                    print('\33[31mPerfil não encontrado!\33[m')
+                    resposta2 = menu.menu(['tentar novamente', 'cadastrar', 'prosseguir sem cadastro'])
+                    if resposta2 == 1:
+                        continue
+                    elif resposta2 == 2:
+                        cadastrado = cadastro(arqbanda, arqlocal, arqpublico)
+                        return(cadastrado)
+                    elif resposta2 == 3:
+                        sc = ['sem cadastro']
+                        return(sc)
+                        break   
+                    else:
+                        print('usuário encontrado')
+                        break
+    except(KeyboardInterrupt):
+        print("\33[31mLogin cancelado\33[m")
+        sc = ["sem cadastro"]
+        return(["sem cadastro"])
+        sleep(1)
+    except:
+        print("\33[31mErro ao fazer login\33[m")
+        sc = ["sem cadastro"]
+        return(["sem cadastro"])
+        sleep(1)
