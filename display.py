@@ -2,6 +2,10 @@ import display as dp
 import menu
 
 def remover_acentos(array):
+    """essa função remove os acentos usando o dicionário e trata a questão de letras maiusculas e minusculas. 
+        
+        Returns:
+            conteudo (list): retorna uma lista com as mesmas palavras, mas sem ser acentuada e todas minúsculas"""
     acentos = {
         'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a', 'ä': 'a', 'Á': 'A', 'À': 'A', 'Ã': 'A', 'Â': 'A', 'Ä': 'A',
         'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e', 'É': 'E', 'È': 'E', 'Ê': 'E', 'Ë': 'E',
