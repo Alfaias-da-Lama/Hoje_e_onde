@@ -2,20 +2,27 @@ import menu
 import logincadas as lc
 import datetime as dt
 import lcmolde as molde
+import display as dp
 
 
 def mostrar_feedback(destinatario):
     """essa função mostra ao usuario de banda ou local os feedbacks dos shows que ja passaram em formato de tabela
         Parameters:
             destinatario (str): o nome da banda ou local que está procurando os feedbacks"""
-    try:
+    #try:
+    if True:
         mostrar = False
         shows = dp.getlist('agenda.csv')
+        print(shows)
         valshows = dp.getlistagenda()
+        print(valshows)
         for linha in shows:
-            if not(linha in valshows):
+            if not (linha[0] == valshows[0]):
+                print(linha)
+                print(destinatario)
                 show = molde.show(linha)
-                if show.feedback and (show.banda == destinatario or show.local == destinatario):
+                print(show.banda, show.local, show.feedback)
+                if bool(show.feedback) and (str(show.banda) == destinatario or str(show.local) == destinatario):
                     for mensagem in show.mensagem.split('/'):
                         print(f"{show.local}, {show.data} --> {mensagem}")
                         mostrar = True
@@ -25,8 +32,8 @@ def mostrar_feedback(destinatario):
                 continue
         if not mostrar:
             print("Sem feedbacks para shows realizados ainda")
-    except:
-        print("\33[31mErro ao mostrar shows\33[m")
+    #except:
+        #print("\33[31mErro ao mostrar shows\33[m")
 
 
 def alterarbanda(arq, usuario):
@@ -54,17 +61,11 @@ def alterarbanda(arq, usuario):
             escolha = menu.menu(['usuario', 'senha', 'nome', 'integrantes', 'bairro', 'estilo', 'contato', 'salvar alterações', 'cancelar'])
             if escolha == 1:
                     while True:
-                        while True:
-                            usuario = input('insira seu nome de usuário: ')
-                            if usuario.isalpha():
-                                break
-                        else:
-                            print('\33[31mEsperado pelo menos 1 letra no usuario\33[m')
+                        usuario = input('insira seu nome de usuário: ')
                         if lc.validaruser(usuario=usuario, arqlocal='perfilXlocais.csv', arqbanda='perfilXbandas.csv', arqpublico='perfilXpublico.csv'):
                             break
                         else:
                             print(f'ja existe um usuario com o cadastro {usuario}')
-                            continue
             elif escolha == 2:
                 while True:
                     while True:
@@ -89,7 +90,7 @@ def alterarbanda(arq, usuario):
                     else:
                         print('\33[31msenhas não condizem\33[m')
             elif escolha == 3:
-                nomebanda = input('insira o novo nome da banda ou artista: ')
+                nome = input('insira o novo nome da banda: ')
             elif escolha == 4:
                 numero = input('qual o numero de integrantes da sua banda: ')
                 integrantes = []
@@ -123,8 +124,8 @@ def alterarbanda(arq, usuario):
                 arquivo.write('usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato\n')
             with open(arq, 'a', encoding='utf-8') as arquivo:
                 for linha in range(1, len(memoria_csv)):
-                    arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strp()}\n')
-            print('\33[31mCadastro atualizado!, faça login novamente\33[m')
+                    arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strip()}\n')
+            print('\33[32mCadastro atualizado! Faça login novamente\33[m')
         else:
             print( '\33[31mCancelando operação... \33[m')
     except(KeyboardInterrupt):
@@ -155,17 +156,11 @@ def alterarartist(arq, usuario):
         escolha = menu.menu(['usuario', 'senha', 'nome', 'bairro', 'estilo', 'contato', 'salvar alterações'])
         if escolha == 1:
                 while True:
-                    while True:
-                        usuario = input('insira seu nome de usuário: ')
-                        if usuario.isalpha():
-                            break
-                    else:
-                        print('\33[31mEsperado pelo menos 1 letra no usuario\33[m')
-                    if lc.validaruser(usuario=usuario, arqlocal='perfilXlocais.csv', arqbanda='perfilXbandas.csv', arqpublico='perfilXpublico.csv'):
-                        break
-                    else:
-                        print(f'ja existe um usuario com o cadastro {usuario}')
-                        continue
+                    usuario = input('insira seu nome de usuário: ')
+                if lc.validaruser(usuario=usuario, arqlocal='perfilXlocais.csv', arqbanda='perfilXbandas.csv', arqpublico='perfilXpublico.csv'):
+                    break
+                else:
+                    print(f'ja existe um usuario com o cadastro {usuario}')
         elif escolha == 2:
             while True:
                 while True:
@@ -190,7 +185,7 @@ def alterarartist(arq, usuario):
                 else:
                     print('\33[31msenhas não condizem\33[m')
         elif escolha == 3:
-            nomebanda = input('insira o novo nome artistico: ')
+            nome = input('insira o novo nome artistico: ')
         elif escolha == 4:
             bairro = input('insira o bairro da sua banda: ')
         elif escolha == 5:
@@ -215,7 +210,7 @@ def alterarartist(arq, usuario):
         with open(arq, 'a', encoding='utf-8') as arquivo:
             for linha in range(1, len(memoria_csv)):
                 arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strip()}\n')
-        print('\33[31mCadastro atualizado!\33[m')
+        print('\33[32mCadastro atualizado! Faça login novamente\33[m')
     else:
         print( '\33[31mCancelando operação... \33[m')
 
@@ -239,7 +234,7 @@ def pagina_de_banda(usuario):
                 else:
                     alterarbanda(arq='perfilXbandas.csv', usuario=usuario)
             elif resposta == 5:
-                mostrar_feedback(usuario.usuario)
+                mostrar_feedback(usuario.nome)
             elif resposta == 6:
                 break
     except(KeyboardInterrupt):

@@ -133,20 +133,15 @@ def cadastro_artista(usuario, senha, arqbanda):
         else:
             break
     if grupo == 'banda':
-        nomebanda = input('qual o nome da sua banda: ')
-        solo = False
+        nomebanda = input('Qual o nome da sua banda: ')
+        tipo = 'banda'
     elif grupo == 'solo':
-        nomebanda = input('qual o seu nome artístico: ')
-        solo = True
-    if solo:
-        estilo = input('qual seu estilo musical: ')
-    else:
-        estilo = input('qual o estilo musical da banda: ')
-    if solo:
-        bairro = input('qual o seu bairro: ')
-    else:
-        bairro = input('digite o bairro da sua banda: ')
-    if solo:
+        nomebanda = input('Qual o seu nome artístico: ')
+        tipo = 'solo'
+
+    if tipo == 'solo':
+        estilo = input('Qual seu estilo musical: ')
+        bairro = input('Qual o seu bairro: ')
         integrantes = 'NaN'
     else:
         while True:
@@ -158,12 +153,13 @@ def cadastro_artista(usuario, senha, arqbanda):
                 break
         integrantes = []
         for integrante in range(qtdinte):
-            integrante = input(f'digite o nome do integrante {integrante+1}: ')
-            if '/' in integrante:
-                print("por favor não use o caracter (/) no preenchimento")
+            integrante_nome = input(f'Digite o nome do integrante {integrante+1}: ')
+            if '/' in integrante_nome:
+                print("Por favor, não use o caracter (/) no preenchimento")
             else:
-                integrantes.append(integrante)
+                integrantes.append(integrante_nome)
         integrantes = '/'.join(integrantes)
+        
     ctt = []
     while True:
         contato = input('insira um contato email ou celular ou 0 para parar: ')

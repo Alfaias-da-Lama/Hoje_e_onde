@@ -1,5 +1,6 @@
 import banda as bd
 import datetime as dt
+import display as dp
 
 class Banda:
     def __init__(self, perfil):
@@ -26,16 +27,19 @@ class Publico:
     def __init__(self, perfil):
         self.usuario = perfil[0]
         self.senha = perfil[1]
-        self.idx_show = perfil[3].split("/")
+        try:
+            self.idx_show = perfil[3].split("/")
+        except(IndexError):
+            self.idx_show = []
         self.show = []
         self.mensagem = True
 
     
-    def regatar_shows(self):
+    def resgatar_shows(self):
         """essa função pegas os eventos associados ao arquivo do usuario e a lista de idx show e associa eles ao molde de show
         salvando na lista show"""
-        shows = bd.getlist('agenda.csv')
-        for numero in idx_show:
+        shows = dp.getlist('agenda.csv')
+        for numero in self.idx_show:
             self.show.append(show(shows[numero]))
 
 
@@ -45,7 +49,7 @@ class Publico:
                 show (obj): o show como objeto no molde contido nesse arquivo que o usuario quer seguir"""
         self.show.append(show)
         self.mensagem = False
-    
+        self.idx_show.append(show.idx)
     
     def salvar_dados(self):
         """função que pega as alterações feitas em relação a shows seguidos e feedbacks e salva

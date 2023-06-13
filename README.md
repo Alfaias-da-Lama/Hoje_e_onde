@@ -2,7 +2,7 @@
     <img width="100" display=inline-block src=logo1.jpg>
 <h1 align="center">Hoje é Onde</h1>
 
->Status: 🚧 Em desenvolvimento... 🚧
+>Status: Completo!
 
 # Índice
 * [Descrição](#descrição)

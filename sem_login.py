@@ -1,5 +1,8 @@
 import menu
 import display as dp
+from time import sleep
+
+
 def pagina_semlog():
     """essa função serve para criar um menu com as opções para usuarios que não se cadastraram"""
     try:
@@ -13,6 +16,8 @@ def pagina_semlog():
                 dp.mostraragenda()
             elif escolha == 4:
                 print("Para seguir shows, voce precisa criar um cadastro de público")
+                sleep(2)
+                break
             elif escolha == 5:
                 break
             else:

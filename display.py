@@ -2,6 +2,28 @@ import display as dp
 import menu
 import datetime as dt
 
+def remover_acentos(array):
+    """essa função remove os acentos usando o dicionário e trata a questão de letras maiusculas e minusculas. 
+        
+        Returns:
+            conteudo (list): retorna uma lista com as mesmas palavras, mas sem ser acentuada e todas minúsculas"""
+    acentos = {
+        'á': 'a', 'à': 'a', 'ã': 'a', 'â': 'a', 'ä': 'a', 'Á': 'A', 'À': 'A', 'Ã': 'A', 'Â': 'A', 'Ä': 'A',
+        'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e', 'É': 'E', 'È': 'E', 'Ê': 'E', 'Ë': 'E',
+        'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i', 'Í': 'I', 'Ì': 'I', 'Î': 'I', 'Ï': 'I',
+        'ó': 'o', 'ò': 'o', 'õ': 'o', 'ô': 'o', 'ö': 'o', 'Ó': 'O', 'Ò': 'O', 'Õ': 'O', 'Ô': 'O', 'Ö': 'O',
+        'ú': 'u', 'ù': 'u', 'û': 'u', 'ü': 'u', 'Ú': 'U', 'Ù': 'U', 'Û': 'U', 'Ü': 'U',
+        'ç': 'c', 'Ç': 'C'
+    }
+    palavras_sem_acentos = []
+    
+    for palavra in array:
+        palavra_sem_acentos = ''.join(acentos.get(char, char) for char in palavra)
+        palavra_sem_acentos = palavra_sem_acentos.lower()
+        palavras_sem_acentos.append(palavra_sem_acentos)
+    
+    return palavras_sem_acentos
+
 def getlist(arq):
     """essa função cria uma matriz separando os valores do arquivo csv por linha e palavra
         Parameters:
@@ -92,8 +114,9 @@ def mostrartabelafiltro(excluir=[0,1,2,7], content=[], filtro=[]):
             vem a palavra de referencia para o filtro"""
     try:
         for index, linha in enumerate(content):
-            for palindex, palavra in enumerate(linha):
-                if filtro[1] in linha[filtro[0]] or index == 0:
+            remove_acento = remover_acentos(linha)
+            for palindex, palavra in enumerate(remove_acento):
+                if filtro[1] in remove_acento[filtro[0]] or filtro[1] in linha[filtro[0]] or index == 0:
                     if not palindex in excluir:
                         if palavra == 'NaN':
                             print('-----'.ljust(20), end=' ')
@@ -148,13 +171,13 @@ def mostrarlocal(contato = False):
         mostrartabela(content=locais)
         resposta = menu.menu(['procurar por nome', 'procurar por bairro', 'procurar por estilo musical'])
         if resposta == 1:
-            filtro = input('por qual nome voce deseja buscar? ')
+            filtro = input('por qual nome voce deseja buscar? ').lower()
             mostrartabelafiltro(content=locais, filtro=[3, filtro], excluir=excluir)
         elif resposta == 2:
-            filtro = input('por qual bairro deseja buscar? ')
+            filtro = input('por qual bairro deseja buscar? ').lower()
             mostrartabelafiltro(content=locais, filtro=[6, filtro], excluir=excluir)
         elif resposta == 3:
-            filtro = input('por qual estilo musical voce deseja buscar? ')
+            filtro = input('por qual estilo musical voce deseja buscar? ').lower()
             mostrartabelafiltro(content=bandas, filtro=[8, filtro], excluir=excluir)
         elif resposta == 4:
             pass

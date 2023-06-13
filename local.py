@@ -16,9 +16,9 @@ def ler_ultimo_index(arq):
         memoria_csv = dp.getlist(arq)
         if len(memoria_csv) > 1:
             ultima_linha = memoria_csv[len(memoria_csv)-1]
-            return (int(ultima_linha[0]))
+            return (int(ultima_linha[0])+1)
         else:
-            return(0)
+            return(1)
     except(FileNotFoundError):
         print("\33[31mErro ao encontrar arquivo, reinicie o programa\33[m")
 
@@ -36,14 +36,20 @@ def criar_evento(local):
                 except(ValueError):
                     print("\33[31mInsira um valor em numero!\33[m")
                 else:
-                    break
+                    if dia <= 31:
+                        break
+                    else:
+                        print("dia não pode ser maior do que 31")
             while True:
                 try:
                     mes = int(input("digite qual o mes do show: "))
                 except(ValueError):
                     print("\33[31mInsira um valor em numero!\33[m")
                 else:
-                    break
+                    if mes <= 12:
+                        break
+                    else:
+                        print("o ano so tem 12 meses")
             while True:
                 try:
                     ano = int(input("digite qual o ano do show: "))
@@ -52,21 +58,24 @@ def criar_evento(local):
                 else:
                     break
             data = f"{dia}/{mes}/{ano}"
-            horastart = input("insira p horario que vai começar o show: ")
+            horastart = input("insira o horario que vai começar o show: ")
             horaend = input("insira o horario previsto para o termino do show: ")
             show = f"{ler_ultimo_index(arq='agenda.csv')};{banda};{local};{data};{horastart};{horaend}"
             print(f'''o show vai ficar: 
         {show}''')
             while True:
                 confirmacao = input("digite [ok] para confirmar ou [cancela] para não registrar o show: ").lower()
+                print(confirmacao)
                 if confirmacao != 'ok' and confirmacao != 'cancela':
                     print("insira uma resposta válida")
                 else:
                     break
-            if confirmacao == 'ok':
-                with open('agenda.csv', 'a', encoding='utf-8') as arquivo:
-                    arquivo.write(show)
-                break
+            if confirmacao == "ok":
+                print('dale papai')
+                print(show)
+                with open('agenda.csv', 'a', encoding='utf-8') as file:
+                    file.write(f"\n{show}")
+                    break
             elif confirmacao == 'cancela':
                 print("\33[31mCancelando operação e voltando ao menu\33[m")
                 while True:
@@ -96,9 +105,9 @@ def reescritor_de_arquivo(memoria_csv):
     with open(arq, 'a', encoding='utf-8') as arquivo:
         for linha in range(1, len(memoria_csv)):
             try:
-                arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5].strip()}\n')
+                arquivo.write(f'\n{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5].strip()}\n')
             except(IndexError):
-                arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4].strip()}\n')
+                arquivo.write(f'\n{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4].strip()}\n')
         print('\33[32mShow atualizado!\33[m')
 
 
@@ -116,7 +125,7 @@ def atualizar(local):
     '''
     try:
         memoria_csv = dp.getlistagenda()
-        dp.mostrartabelafiltro(content=memoria_csv, filtro=[2, local])
+        dp.mostrartabelafiltro(content=memoria_csv, filtro=[2, local], excluir=[])
         while True:
             try:
                 ordem = int(input("qual o show que voce quer alterar?: "))

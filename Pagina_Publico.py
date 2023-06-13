@@ -1,6 +1,8 @@
 import banda as bd
 import menu
 import lcmolde as lc
+import display as dp
+import logincadas as lic
 
 def alterarpublico(arq, usuario):
     """essa função serve para alterar uma linha específica do arquivo perfilXpublico.
@@ -8,8 +10,8 @@ def alterarpublico(arq, usuario):
             arq (str): nome do arquivo que vai ser alterado
             usuario (obj): usuario como objeto que vai ser usado na função de pegar perfil"""
     prosseguir = True
-    linha = bd.pegarperfil(arq, usuario)
-    memoria_csv = getlist(arq)
+    linha = dp.pegarperfil(arq, usuario)
+    memoria_csv = dp.getlist(arq)
     usuario = memoria_csv[linha][0]
     senha = memoria_csv[linha][1]
     while True:
@@ -25,7 +27,7 @@ def alterarpublico(arq, usuario):
                             break
                     else:
                         print('\33[31mEsperado pelo menos 1 letra no usuario\33[m')
-                    if lc.validaruser(usuario=usuario, arqlocal='perfilXlocais.csv', arqbanda='perfilXbandas.csv'):
+                    if lic.validaruser(usuario=usuario, arqlocal='perfilXlocais.csv', arqbanda='perfilXbandas.csv', arqpublico='perfilXpublico.csv'):
                         break
                     else:
                         print(f'ja existe um usuario com o cadastro {usuario}')
@@ -53,26 +55,29 @@ def alterarpublico(arq, usuario):
                     break
                 else:
                     print('\33[31msenhas não condizem\33[m')
-        elif escolha == 8:
+        elif escolha == 3:
             break
-        elif escolha == 9:
+        elif escolha == 4:
             prosseguir = False
             break
         memoria_csv[linha] = [usuario, senha]
     print(memoria_csv[linha])
     escolha = input('Digite [ok] para confirmar ou [cancelar] para não registrar as mudanças: ')
-    if prosseguir and escolha != 'cancelar':
+    if prosseguir and (escolha != 'cancelar'):
         try:
             with open(arq, 'w', encoding='utf-8') as arquivo:
-                arquivo.write('usuario;senha;tipo;nome;integrantes;endereço;tipomusical;contato\n')
+                arquivo.write('usuario;senha;idx_show\n')
             with open(arq, 'a', encoding='utf-8') as arquivo:
                 for linha in range(1, len(memoria_csv)):
-                    arquivo.write(f'{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2]};{memoria_csv[linha][3]};{memoria_csv[linha][4]};{memoria_csv[linha][5]};{memoria_csv[linha][6]};{memoria_csv[linha][7].strip()}\n')
+                    if len(linha) == 3:
+                        arquivo.write(f'\n{memoria_csv[linha][0]};{memoria_csv[linha][1]};{memoria_csv[linha][2].strip()}\n')
+                    else:
+                        arquivo.write(f'\n{memoria_csv[linha][0]};{memoria_csv[linha][1].strip()}\n')
             print('\33[32mCadastro atualizado!, faça login novamente\33[m')
         except:
             print("\33[31mErro ao atualizar cadastro, tente novamente\33[m")
     else:
-        print( '\33[31mCancelando operação... \33[m')
+        print('\33[31mCancelando operação... \33[m')
 
 
 def seguirshow(usuario):
@@ -80,30 +85,39 @@ def seguirshow(usuario):
     dias faltam para a data do evento e posteriormente ser capaz de dar feedbacks
         Parameters:
             usuario (obj): recebe o usuario como objeto para associar o show seguido a ele"""
-    memoria_show = bd.getlistagenda()
-    bd.mostrartabela(excluir=[], content=memoria_show)
-    while True:
-        try:
-            escolha = int(input('qual show voce deseja seguir [index]: '))
-        except(ValueError):
-            print("\33[31mInsira um numero válido\33[m")
-    show = lc.show(memoria_show[escolha])
-    usuario.show.append(show)
+    try:
+        memoria_show = dp.getlistagenda()
+        dp.mostrartabela(excluir=[], content=memoria_show, idx=False)
+        while True:
+            try:
+                escolha = input('qual show voce deseja seguir [ordem]: ')
+            except(ValueError):
+                print("\33[31mInsira um numero válido\33[m")
+            else:
+                break
+        for shows in memoria_show:
+            print(shows)
+            if shows[0] == escolha:
+                show = lc.show(shows)
+                usuario.show.append(show)
+    except(KeyboardInterrupt):
+        print("\33[31mVoltando ao menu\33[m")
 
 
 def mostrarshows(usuario):
     """essa função mostra os shows seguidos ao usuario, mostrando as informações do show e quantos dias faltam para a data
         Parameters:
             usuario (obj): recebe o usuario como objeto para verificar os shows associados"""
-    try:
+    #try:
+    if True:
         if usuario.show != []:
             print('shows seguidos:')
             for show in usuario.show:
-                print(f'{show.banda<12} {show.local<12} {show.horastart<12} {show.horaend<12}, faltam {show.temporest} dias para o show começar')
+                print(f'{show.banda.ljust(12)} {show.local.ljust(12)} {show.horastart.ljust(12)} {show.horaend.ljust(12)}, faltam {show.temporest} dias para o show começar')
         else:
             print(usuario.mensagem)
-    except:
-        print("\33[31mErro ao mostrar shows seguidos\33[m")
+    #except:
+        #print("\33[31mErro ao mostrar shows seguidos\33[m")
 
 
 def dar_feedback(usuario):
@@ -111,9 +125,9 @@ def dar_feedback(usuario):
         Parameters:
             usuario (obj): recebe o usuario para verificação de show e para associar o nome ao feedback"""
     cont = 0
-    valshow = bd.getlistagenda()
-    for show in usuario.show:
-        if [show.banda, show.local, show.horastart, show.horaend] in valshow:
+    valshow = dp.getlistagenda()
+    for idx, show in enumerate(usuario.show):
+        if [show.banda, show.local, show.data] == [valshow[idx][0], valshow[idx][1]]:
             cont+=1
             print(f'{cont} = {show.banda} - {show.local} - {show.data}')
     try:
@@ -139,7 +153,7 @@ def pagina_publico(usuario):
         elif escolha == 3:
             bd.mostraragenda()
         elif escolha == 4:
-            alterarpublico(arq='perfilXpublico.csv', usuario=usuario.usuario)
+            alterarpublico(arq='perfilXpublico.csv', usuario=usuario)
         elif escolha == 5:
             seguirshow(usuario=usuario)
         elif escolha == 6:
